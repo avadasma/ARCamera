@@ -1,0 +1,103 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/kavya/Kavya/project/BushFire/CAmera/rajawali/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+            "map": [
+                {
+                    "source": "/home/kavya/Kavya/project/BushFire/CAmera/rajawali/build/intermediates/bundles/debug/res/values/values.xml",
+                    "from": {
+                        "startLines": "2,6,7,8,9,10,11,12,13,14",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,203,249,294,340,386,430,474,524,577",
+                        "endLines": "5,6,7,8,9,10,11,12,13,17",
+                        "endColumns": "11,45,44,45,45,43,43,49,52,11",
+                        "endOffsets": "198,244,289,335,381,425,469,519,572,729"
+                    }
+                },
+                {
+                    "source": "/home/kavya/.gradle/caches/transforms-1/files-1.1/rules-0.5.aar/d9b2690888433aad4e31850494d2a753/res/values/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "229",
+                        "endColumns": "45",
+                        "endOffsets": "270"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "1344",
+                        "endColumns": "45",
+                        "endOffsets": "1385"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/kavya/Desktop/camerafilterbush/rajawali/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+            "map": [
+                {
+                    "source": "/home/kavya/Desktop/camerafilterbush/rajawali/build/intermediates/bundles/debug/res/values/values.xml",
+                    "from": {
+                        "startLines": "2,6,7,8,9,10,11,12,13,14",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,203,249,294,340,386,430,474,524,577",
+                        "endLines": "5,6,7,8,9,10,11,12,13,17",
+                        "endColumns": "11,45,44,45,45,43,43,49,52,11",
+                        "endOffsets": "198,244,289,335,381,425,469,519,572,729"
+                    }
+                },
+                {
+                    "source": "/home/kavya/.gradle/caches/transforms-1/files-1.1/rules-0.5.aar/27a40a91a9d20d96b01a1d2465fabb4e/res/values/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "229",
+                        "endColumns": "45",
+                        "endOffsets": "270"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "1344",
+                        "endColumns": "45",
+                        "endOffsets": "1385"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/geetha/compasssites_projects/CameraFilterBush/rajawali/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+            "map": [
+                {
+                    "source": "/home/geetha/compasssites_projects/CameraFilterBush/rajawali/build/intermediates/bundles/debug/res/values/values.xml",
+                    "from": {
+                        "startLines": "2,6,7,8,9,10,11,12,13,14",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,203,249,294,340,386,430,474,524,577",
+                        "endLines": "5,6,7,8,9,10,11,12,13,17",
+                        "endColumns": "11,45,44,45,45,43,43,49,52,11",
+                        "endOffsets": "198,244,289,335,381,425,469,519,572,729"
+                    }
+                },
+                {
+                    "source": "/home/geetha/.gradle/caches/transforms-1/files-1.1/rules-0.5.aar/af993172382a6185c7fc80e29cea7f1f/res/values/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "229",
+                        "endColumns": "45",
+                        "endOffsets": "270"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "1344",
+                        "endColumns": "45",
+                        "endOffsets": "1385"
+                    }
+                }
+            ]
+        }
+    ]
+}
