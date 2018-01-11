@@ -25,7 +25,7 @@ public class OrnamentFactory {
         ornaments.add(getNoOrnament());
         ornaments.add(getTigerNose());
         ornaments.add(getVMask());
-        /*ornaments.add(getLaserEye());
+        ornaments.add(getLaserEye());
         ornaments.add(getCamera());
         ornaments.add(getIronMan());
         ornaments.add(getMobile());
@@ -34,7 +34,8 @@ public class OrnamentFactory {
         ornaments.add(getGlasses());
         ornaments.add(getLaptop());
         ornaments.add(getCrystalBall());
-        ornaments.add(getInterview());*/
+        ornaments.add(getInterview());
+
         return ornaments;
     }
 

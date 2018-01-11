@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,6 +20,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.compass.camera.ARCamContract;
+import com.compass.camera.ARCamPresenter;
+import com.compass.camera.Accelerometer;
+import com.compass.camera.Camera1Renderer;
+import com.compass.camera.CameraTrackRenderer;
+import com.compass.camera.CircularProgressView;
+import com.compass.camera.CustomBottomSheet;
+import com.compass.camera.DynamicPoint;
+import com.compass.camera.FrameCallback;
+import com.compass.camera.My3DRenderer;
+import com.compass.camera.MyRenderer;
+import com.compass.camera.Ornament;
+import com.compass.camera.OrnamentAdapter;
+import com.compass.camera.OrnamentFactory;
+import com.compass.camera.PermissionUtils;
+import com.compass.camera.R;
+import com.compass.camera.TextureController;
 import com.compass.camera.camera.AFilter;
 import com.compass.camera.camera.LandmarkFilter;
 import com.sensetime.stmobileapi.STMobileFaceAction;
@@ -30,7 +47,7 @@ import org.rajawali3d.view.ISurface;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ARCamContract.View,FrameCallback{
+public class MainActivity extends AppCompatActivity implements ARCamContract.View,FrameCallback {
 
     private final static String TAG = MainActivity.class.getSimpleName();
     // Photo Size
@@ -312,105 +329,9 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
     };
 
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-      *//*  PermissionUtils.onRequestPermissionsResult(requestCode == 10, grantResults,
-                initViewRunnable, new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ARCamActivity.this,
-                                "Did not get the necessary permissions",
-                                Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });*//*
-    }*/
-
-  /*  @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_camera_filter, menu);
-        return super.onCreateOptionsMenu(menu);
-    }*/
-
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        mCurrentFilterId = item.getItemId();
-        if (mCurrentFilterId == R.id.menu_camera_switch) {
-            switchCamera();
-        } else {
-            setSingleFilter(mController, mCurrentFilterId);
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
- /*   private void setSingleFilter(TextureController controller, int menuId) {
-        controller.clearFilter();
-        controller.addFilter(FilterFactory.getFilter(getResources(), menuId));
-    }
-
-    public void switchCamera(){
-        cameraId = cameraId == 1 ? 0 : 1;
-        if (mController != null) {
-            mController.destroy();
-        }
-        initViewRunnable.run();
-    }*/
-
- /*   @Override
-    protected void onResume() {
-        super.onResume();
-        if (mController != null) {
-            mController.onResume();
-            mController.setNeedFrame(mIsNeedFrameCallback);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mController != null) {
-            mController.setNeedFrame(false);
-            mController.onPause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mController != null) {
-            mController.setNeedFrame(false);
-            mController.destroy();
-        }
-    }*/
-
     @Override
     public void onFrame(final byte[] bytes, long time) {
-       /* if (mIsNeedSkinColor) {  // Get the color of the center of the face
-            Log.e(TAG, "isNeedSkinColor");
-            if (mSamplePoint != null) {
-                Bitmap bitmap = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT,
-                        Bitmap.Config.ARGB_8888);
-                ByteBuffer b = ByteBuffer.wrap(bytes);
-                // FIXME -- java.lang.RuntimeException: Buffer not large enough for pixels
-                bitmap.copyPixelsFromBuffer(b);
 
-                int x = (int) mSamplePoint.x;
-                int y = (int) mSamplePoint.y;
-                Log.e(TAG, "points[44]: x= " + x + ", y= " + y);
-                int pixel = bitmap.getPixel(x, y);
-                String skinColor = Integer.toHexString(pixel);
-                Log.e(TAG, "get Skin Color: " + skinColor);
-                bitmap.recycle();
-                mSamplePoint = null;
-                mIsNeedSkinColor = false;
-                // Change the color of the model's texture based on the skin color
-                ((My3DRenderer) mISurfaceRenderer).setSkinColor(pixel);
-            }
-
-
-        } else*/
         if (mFrameType == TYPE_PHOTO) {  // Deal with pictures
             mFrameType = TYPE_NONE;
             handlePhotoFrame(bytes);
