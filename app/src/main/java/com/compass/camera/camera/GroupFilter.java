@@ -11,7 +11,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Created by Simon on 2017/7/5.
+ * Created by kavya on 10/1/18.
  */
 
 public class GroupFilter extends AFilter{
@@ -31,38 +31,12 @@ public class GroupFilter extends AFilter{
     protected void initBuffer() {
     }
 
-    public void addFilter(final AFilter filter){
-        //绘制到frameBuffer上和绘制到屏幕上的纹理坐标是不一样的
-        //Android屏幕相对GL世界的纹理Y轴翻转
-        MatrixUtils.flip(filter.getMatrix(), false, true);
-        mFilterQueue.add(filter);
-    }
+
 
     public AFilter getLastFilter() {
         return mFilters.size() <= 0 ? null : mFilters.get(mFilters.size()-1);
     }
 
-    public boolean removeFilter(AFilter filter){
-        boolean b = mFilters.remove(filter);
-        if(b){
-            size--;
-        }
-        return b;
-    }
-
-    public AFilter removeFilter(int index){
-        AFilter f = mFilters.remove(index);
-        if(f != null){
-            size--;
-        }
-        return f;
-    }
-
-    public void clearAll(){
-        mFilterQueue.clear();
-        mFilters.clear();
-        size = 0;
-    }
 
     public void draw(){
         updateFilter();
@@ -115,14 +89,14 @@ public class GroupFilter extends AFilter{
         createFrameBuffer();
     }
 
-    //创建离屏buffer
+    //Create off-screen buffer
     private int fTextureSize = 2;
     private int[] fFrame = new int[1];
     private int[] fRender = new int[1];
     private int[] fTexture = new int[fTextureSize];
     private int textureIndex = 0;
 
-    //创建FrameBuffer
+    //Create FrameBuffer
     private boolean createFrameBuffer() {
         GLES20.glGenFramebuffers(1, fFrame, 0);
         GLES20.glGenRenderbuffers(1, fRender, 0);
@@ -130,7 +104,8 @@ public class GroupFilter extends AFilter{
         genTextures();
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fFrame[0]);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, fRender[0]);
-        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, width, height);
+        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, width,
+                height);
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
                 GLES20.GL_TEXTURE_2D, fTexture[0], 0);
         GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
@@ -143,29 +118,28 @@ public class GroupFilter extends AFilter{
         return false;
     }
 
-    //生成Textures
+    //Generate Textures
     private void genTextures() {
         GLES20.glGenTextures(fTextureSize, fTexture, 0);
         for (int i = 0; i < fTextureSize; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, fTexture[i]);
             GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height,
                     0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
+                    GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
+                    GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                    GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                    GLES20.GL_LINEAR);
         }
     }
 
-    //取消绑定Texture
+    //Unbind Texture
     private void unBindFrame() {
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
     }
 
-    private void deleteFrameBuffer() {
-        GLES20.glDeleteRenderbuffers(1, fRender, 0);
-        GLES20.glDeleteFramebuffers(1, fFrame, 0);
-        GLES20.glDeleteTextures(1, fTexture, 0);
-    }
 }

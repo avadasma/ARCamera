@@ -4,12 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,12 +16,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,21 +27,18 @@ import com.sensetime.stmobileapi.STMobileFaceAction;
 import org.rajawali3d.renderer.ISurfaceRenderer;
 import org.rajawali3d.view.ISurface;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements ARCamContract.View,FrameCallback{
+
     private final static String TAG = MainActivity.class.getSimpleName();
-    // 拍照尺寸
+    // Photo Size
     private final static int IMAGE_WIDTH = 720;
     private final static int IMAGE_HEIGHT = 1280;
-    // 录像尺寸
-    private final static int VIDEO_WIDTH = 384;
-    private final static int VIDEO_HEIGHT = 640;
-    // SenseTime人脸检测最大支持的尺寸为 640 x 480
+
+
+    // SenseTime The maximum supported face detection is 640 x 480
     private final static int PREVIEW_WIDTH = 640;
     private final static int PREVIEW_HEIGHT = 480;
 
@@ -60,64 +49,61 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
     private Context mContext;
     private ARCamPresenter mPresenter;
 
-    private RelativeLayout mLayoutRoot;
-    // 用于渲染相机预览画面
+    // Used to render the camera preview
     private SurfaceView mSurfaceView;
-    // 用于显示人脸检测参数
+
+    //Used to display face detection parameters
     private TextView mTrackText, mActionText;
-    // 处理滤镜逻辑
+
+    // Processing filter logic
     protected TextureController mController;
     private MyRenderer mRenderer;
-    // 相机Id，后置是0，前置是1
+
+    // Camera Id, rear set to 0, front set to 1
     private int cameraId = 1;
-    // 默认的相机滤镜的Id
+
+    //The default camera filter id
     protected int mCurrentFilterId = R.id.menu_camera_default;
-    // 加速度计工具类，似乎是用于人脸检测的
+
+    // Accelerometer tools seem to be used for face detection
     private static Accelerometer mAccelerometer;
 
-    // 由于不会写显示3D模型的滤镜，暂时借助于OpenGL ES引擎Rajawali
-    // 用于渲染3D模型
+    //Because you can not write filters that display 3D models,
+    // With the help of OpenGL ES engine Rajawali for now.
+    // Used to render 3D models
     private ISurface mRenderSurface;
     private ISurfaceRenderer mISurfaceRenderer;
-    // 因为渲染相机和3D模型的SurfaceView是分开的，拍照/录像时只能分别取两路数据，再合并
-    // 拍照用的
+    //Because the SurfaceView that renders the camera and the 3D model is separate,
+    // Photo / video can only take two data separately, and then merged
+    // Take pictures
     private Bitmap mRajawaliBitmap = null;
-    // 录像用的
-    private int[] mRajawaliPixels = null;
 
-    // 拍照/录像按钮
+    // Camera / video button
     private CircularProgressView mCapture;
-    // 处理录像逻辑
 
-    private ExecutorService mExecutor;
-    // 录像持续的时间
+    // Duration of video recording
     private long time;
-    // 录像最长时间限制
-    private long maxTime = 20000;
 
-
-    // 处理帧数据的标志位 0为拍照 1为录像
+    // The flag 0 for processing frame data and 1 for recording
     private int mFrameType = TYPE_NONE;
+
+    // Decorations list
     private CustomBottomSheet mOrnamentSheet;
     private RecyclerView mRvOrnament;
     private OrnamentAdapter mOrnamentAdapter;
     private List<Ornament> mOrnaments;
 
     private boolean mIsNeedSkinColor = false;
-    private PointF mSamplePoint = null;
-
-    private int mSurfaceWidth;
-    private int mSurfaceHeight;
+    // private PointF mSamplePoint = null;
 
     private boolean mIsNeedFrameCallback = false;
-    private View mStreamingView;
-    private Handler mStreamingHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = MainActivity.this;
         mPresenter = new ARCamPresenter(this);
-        // 用于人脸检测
+        // For face detection
         mAccelerometer = new Accelerometer(this);
         mAccelerometer.start();
 
@@ -130,10 +116,85 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
         initSurfaceView();
         initRajawaliSurface();
         initCaptureButton();
-        initCommonView();
         initMenuButton();
+        initCommonView();
         initOrnamentSheet();
 
+    }
+
+    private void initSurfaceView() {
+        mSurfaceView = (SurfaceView) findViewById(R.id.camera_surface);
+        // Hold down the screen to cancel the filter, let go of the recovery filter,
+        // in order to contrast
+   /*     mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                   *//* case MotionEvent.ACTION_DOWN:
+                        mController.clearFilter();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mController.addFilter(FilterFactory.getFilter(getResources(),
+                                mCurrentFilterId));
+                        break;*//*
+                }
+                return true;
+            }
+        });*/
+    }
+
+    private void initRajawaliSurface() {
+        mRenderSurface = (org.rajawali3d.view.SurfaceView) findViewById(R.id.rajwali_surface);
+        // Make the background of Rajawali's SurfaceView transparent
+        ((org.rajawali3d.view.SurfaceView) mRenderSurface).setTransparent(true);
+
+        mISurfaceRenderer = new My3DRenderer(this);
+        ((My3DRenderer) mISurfaceRenderer).setScreenW(IMAGE_WIDTH);
+        ((My3DRenderer) mISurfaceRenderer).setScreenH(IMAGE_HEIGHT);
+        mRenderSurface.setSurfaceRenderer(mISurfaceRenderer);
+
+
+        //When taking pictures, take the frame data of Rajawali first,turn Bitmap stand-by;
+        // Then take the camera preview frame data, the final synthesis
+        ((org.rajawali3d.view.SurfaceView) mRenderSurface).setOnTakeScreenshotListener
+                (new org.rajawali3d.view.SurfaceView.OnTakeScreenshotListener() {
+            @Override
+            public void onTakeScreenshot(Bitmap bitmap) {
+                Log.e(TAG, "onTakeScreenshot(Bitmap bitmap)");
+                mRajawaliBitmap = bitmap;
+                mController.takePhoto();
+            }
+        });
+
+    }
+
+    private void initCaptureButton() {
+        mCapture = (CircularProgressView) findViewById(R.id.btn_capture);
+
+        // Photo / video button logic
+        mCapture.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+
+                        time = System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //Short press to take picture
+                        if(System.currentTimeMillis() - time < 500){
+                            mFrameType = TYPE_PHOTO;
+                            mController.setFrameCallback(IMAGE_WIDTH, IMAGE_HEIGHT,
+                                    MainActivity.this);
+                            // When taking pictures, take Rajawali's frame data first
+                            ((org.rajawali3d.view.SurfaceView) mRenderSurface).takeScreenshot();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void initMenuButton() {
@@ -145,19 +206,24 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-
                     case R.id.iv_ornament:
                         mOrnamentSheet.show();
                         break;
-
                 }
             }
         };
-
-
         ivOrnament.setOnClickListener(onClickListener);
 
     }
+
+
+    private void initCommonView() {
+        //mLayoutRoot = (RelativeLayout) findViewById(R.id.layout_root);
+        mTrackText = (TextView) findViewById(R.id.tv_track);
+        mActionText = (TextView) findViewById(R.id.tv_action);
+    }
+
+
 
     private void initOrnamentSheet() {
         mOrnaments = new ArrayList<>();
@@ -167,19 +233,10 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
             public void onItemClick(int position) {
                 mOrnamentSheet.dismiss();
                 Ornament ornament = mOrnaments.get(position);
-                if (position == 0) ornament = null;
+                if (position == 0)
+                    ornament = null;
                 ((My3DRenderer) mISurfaceRenderer).setOrnamentModel(ornament);
                 ((My3DRenderer) mISurfaceRenderer).setIsNeedUpdateOrnament(true);
-                if (ornament != null) {
-                    handleSkinColor(ornament);
-                    handleStreamingTexture(ornament);
-                    handleFilterInsideOrnament(ornament);
-
-                    String toastMsg = ornament.getToastMsg();
-                    if (toastMsg != null) {
-                        Toast.makeText(mContext, toastMsg, Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         });
 
@@ -198,315 +255,139 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
         mOrnamentAdapter.notifyDataSetChanged();
     }
 
-    private void handleSkinColor(Ornament ornament) {
-        List<Ornament.Model> modelList = ornament.getModelList();
-        if (modelList != null && modelList.size() > 0) {
-            for (Ornament.Model model : modelList) {
-                if (model != null && model.isNeedSkinColor()) {
-                    // 获取人脸中心点的颜色
-                    mIsNeedSkinColor = true;
-                    mController.takePhoto();
-                    return;
-                }
-            }
-        }
-    }
-
-    private void handleStreamingTexture(Ornament ornament) {
-        mIsNeedFrameCallback = false;
-        mController.setNeedFrame(false);
-        mController.setFrameCallbackType(ornament.getFrameCallbackType());
-
-        mStreamingHandler = null;
-        if (mStreamingView != null) {
-            mLayoutRoot.removeView(mStreamingView);
-            mStreamingView = null;
-        }
-
-        List<Ornament.Model> modelList = ornament.getModelList();
-        if (modelList != null && modelList.size() > 0) {
-            for (Ornament.Model model : modelList) {
-                if (model != null && model.isNeedStreaming()) {
-
-                    int streamingViewType = model.getStreamingViewType();
-                    if (streamingViewType == Ornament.Model.STREAMING_IMAGE_VIEW) {
-                        handleStreamingTextureImageView();
-                    } else if (streamingViewType == Ornament.Model.STREAMING_WEB_VIEW) {
-                        handleStreamingTextureWebView();
-                    }
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                            model.getStreamingViewWidth(), model.getStreamingViewHeight());
-                    mLayoutRoot.addView(mStreamingView, layoutParams);
-                    mStreamingView.setVisibility(View.INVISIBLE);
-
-                    ((My3DRenderer) mISurfaceRenderer).setStreamingView(mStreamingView);
-
-                    if (mStreamingHandler == null) {
-                        mStreamingHandler = new Handler(Looper.getMainLooper());
-                    }
-                    ((My3DRenderer) mISurfaceRenderer).setStreamingHandler(mStreamingHandler);
-
-                    if (ornament.getFrameCallbackType() != TextureController.FRAME_CALLBACK_DISABLE) {
-                        mIsNeedFrameCallback = true;
-                        mController.setNeedFrame(true);
-                    }
-                    return;
-                }
-            }
-        }
-    }
-
-    private void handleStreamingTextureImageView() {
-        mStreamingView = new ImageView(mContext);
-        ((ImageView) mStreamingView).setScaleType(ImageView.ScaleType.CENTER_CROP);
-    }
-
-    private void handleStreamingTextureWebView() {
-        mStreamingView = new WebView(mContext);
-        ((WebView) mStreamingView).setWebViewClient(new WebViewClient());
-        setDesktopMode(((WebView) mStreamingView), true);
-        ((WebView) mStreamingView).setInitialScale(300);
-        ((WebView) mStreamingView).loadUrl("https://github.com/SimonCherryGZ/ARCamera");
-    }
-
-    private void setDesktopMode(WebView webView, boolean enabled) {
-        final WebSettings webSettings = webView.getSettings();
-
-        final String newUserAgent;
-        if (enabled) {
-            newUserAgent = webSettings.getUserAgentString().replace("Mobile", "eliboM").replace("Android", "diordnA");
-        }
-        else {
-            newUserAgent = webSettings.getUserAgentString().replace("eliboM", "Mobile").replace("diordnA", "Android");
-        }
-
-        webSettings.setUserAgentString(newUserAgent);
-        webSettings.setUseWideViewPort(enabled);
-        webSettings.setLoadWithOverviewMode(enabled);
-        webSettings.setSupportZoom(enabled);
-        webSettings.setBuiltInZoomControls(enabled);
-    }
-
-    private void handleFilterInsideOrnament(Ornament ornament) {
-        if (ornament != null) {
-            int selectFilterId = ornament.getSelectFilterId();
-            if (selectFilterId != R.id.menu_camera_default) {
-                mCurrentFilterId = selectFilterId;
-               // setSingleFilter(mController, mCurrentFilterId);
-            }
-        }
-    }
 
 
-
-    private void initCommonView() {
-        mLayoutRoot = (RelativeLayout) findViewById(R.id.layout_root);
-        mTrackText = (TextView) findViewById(R.id.tv_track);
-        mActionText = (TextView) findViewById(R.id.tv_action);
-    }
-
-    private void initSurfaceView() {
-        mSurfaceView = (SurfaceView) findViewById(R.id.camera_surface);
-        // 按住屏幕取消滤镜，松手恢复滤镜，以便对比
-        mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mController.clearFilter();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                       // mController.addFilter(FilterFactory.getFilter(getResources(), mCurrentFilterId));
-                        break;
-                }
-                return true;
-            }
-        });
-    }
-    private void initRajawaliSurface() {
-        mRenderSurface = (org.rajawali3d.view.SurfaceView) findViewById(R.id.rajwali_surface);
-        // 将Rajawali的SurfaceView的背景设为透明
-        ((org.rajawali3d.view.SurfaceView) mRenderSurface).setTransparent(true);
-        // 将Rajawali的SurfaceView的尺寸设为录像的尺寸
-        ((org.rajawali3d.view.SurfaceView) mRenderSurface).getHolder().setFixedSize(VIDEO_WIDTH, VIDEO_HEIGHT);
-        mISurfaceRenderer = new My3DRenderer(this);
-        ((My3DRenderer) mISurfaceRenderer).setScreenW(IMAGE_WIDTH);
-        ((My3DRenderer) mISurfaceRenderer).setScreenH(IMAGE_HEIGHT);
-        mRenderSurface.setSurfaceRenderer(mISurfaceRenderer);
-        ((org.rajawali3d.view.SurfaceView) mRenderSurface).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    float scaleW = VIDEO_WIDTH / (float) mSurfaceWidth;
-                    float scaleH = VIDEO_HEIGHT / (float) mSurfaceHeight;
-                    float touchX = event.getX() * scaleW;
-                    float touchY = event.getY() * scaleH;
-                    ((My3DRenderer) mISurfaceRenderer).getObjectAt(touchX, touchY);
-                }
-                return onTouchEvent(event);
-            }
-        });
-
-        // 拍照时，先取Rajawali的帧数据，转成Bitmap待用；再取相机预览的帧数据，最后合成
-        ((org.rajawali3d.view.SurfaceView) mRenderSurface).setOnTakeScreenshotListener(new org.rajawali3d.view.SurfaceView.OnTakeScreenshotListener() {
-            @Override
-            public void onTakeScreenshot(Bitmap bitmap) {
-                Log.e(TAG, "onTakeScreenshot(Bitmap bitmap)");
-                mRajawaliBitmap = bitmap;
-                mController.takePhoto();
-            }
-        });
-        // 录像时，取Rajawali的帧数据待用
-        ((org.rajawali3d.view.SurfaceView) mRenderSurface).setOnTakeScreenshotListener2(new org.rajawali3d.view.SurfaceView.OnTakeScreenshotListener2() {
-            @Override
-            public void onTakeScreenshot(int[] pixels) {
-                Log.e(TAG, "onTakeScreenshot(byte[] pixels)");
-                mRajawaliPixels = pixels;
-            }
-        });
-
-        ((org.rajawali3d.view.SurfaceView) mRenderSurface).getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+    // Initialized Runnable
+    private Runnable initViewRunnable = new Runnable() {
+        @Override
+        public void run() {
+            //mExecutor = Executors.newSingleThreadExecutor();
+            mController = new TextureController(mContext);
+            // Set the data source
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mRenderer = new CameraTrackRenderer(mContext, (CameraManager)getSystemService
+                        (CAMERA_SERVICE), mController, cameraId);
+                // Face detection of the callback
+                ((CameraTrackRenderer) mRenderer).setTrackCallBackListener(new CameraTrackRenderer.
+                        TrackCallBackListener() {
                     @Override
-                    public void onGlobalLayout() {
-                        ((org.rajawali3d.view.SurfaceView) mRenderSurface).getViewTreeObserver()
-                                .removeOnGlobalLayoutListener(this);
-                        mSurfaceWidth = ((org.rajawali3d.view.SurfaceView) mRenderSurface).getWidth();
-                        mSurfaceHeight = ((org.rajawali3d.view.SurfaceView) mRenderSurface).getHeight();
+                    public void onTrackDetected(STMobileFaceAction[] faceActions,
+                                                final int orientation, final int value,
+                                                final float pitch, final float roll,
+                                                final float yaw, final int eye_dist,
+                                                final int id, final int eyeBlink,
+                                                final int mouthAh, final int headYaw,
+                                                final int headPitch, final int browJump) {
+                        onTrackDetectedCallback(faceActions, orientation, value,
+                                pitch, roll, yaw, eye_dist, id, eyeBlink, mouthAh, headYaw,
+                                headPitch, browJump);
                     }
                 });
-    }
 
-
-    private void initCaptureButton() {
-        mCapture = (CircularProgressView) findViewById(R.id.btn_capture);
-        mCapture.setTotal((int)maxTime);
-        // 拍照/录像按钮的逻辑
-        mCapture.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                      //  recordFlag = false;
-                        time = System.currentTimeMillis();
-                       // mCapture.postDelayed(captureTouchRunnable, 500);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                       // recordFlag = false;
-                        // 短按拍照
-                        if(System.currentTimeMillis() - time < 500){
-                            mFrameType = TYPE_PHOTO;
-                           // mCapture.removeCallbacks(captureTouchRunnable);
-                            mController.setFrameCallback(IMAGE_WIDTH, IMAGE_HEIGHT, MainActivity.this);
-                            // 拍照时，先取Rajawali的帧数据
-                            ((org.rajawali3d.view.SurfaceView) mRenderSurface).takeScreenshot();
-                        }
-                        break;
-                }
-                return false;
+            }else{
+                // Camera1 temporarily did not write face detection
+                mRenderer = new Camera1Renderer(mController, cameraId);
             }
-        });
-    }
 
-        @Override
-        public void onSavePhotoSuccess(final String fileName) {
+            setContentView();
 
-            runOnUiThread(new Runnable() {
+            mController.setFrameCallback(IMAGE_WIDTH, IMAGE_HEIGHT, MainActivity.this);
+            mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
                 @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this, "success" + fileName, Toast.LENGTH_SHORT).show();
+                public void surfaceCreated(SurfaceHolder holder) {
+                    mController.surfaceCreated(holder);
+                    mController.setRenderer(mRenderer);
+                }
+                @Override
+                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+                {
+                    mController.surfaceChanged(width, height);
+                }
+                @Override
+                public void surfaceDestroyed(SurfaceHolder holder) {
+                    mController.surfaceDestroyed();
                 }
             });
         }
+    };
 
-        @Override
-        public void onSavePhotoFailed() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this, "failed" , Toast.LENGTH_SHORT).show();
-                }
-            });
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+      *//*  PermissionUtils.onRequestPermissionsResult(requestCode == 10, grantResults,
+                initViewRunnable, new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ARCamActivity.this,
+                                "Did not get the necessary permissions",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });*//*
+    }*/
+
+  /*  @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_camera_filter, menu);
+        return super.onCreateOptionsMenu(menu);
+    }*/
+
+   /* @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mCurrentFilterId = item.getItemId();
+        if (mCurrentFilterId == R.id.menu_camera_switch) {
+            switchCamera();
+        } else {
+            setSingleFilter(mController, mCurrentFilterId);
         }
+        return super.onOptionsItemSelected(item);
+    }*/
 
-        @Override
-        public void onGet3dModelRotation(float pitch, float roll, float yaw) {
-            ((My3DRenderer) mISurfaceRenderer).setAccelerometerValues(roll, yaw, pitch);
+ /*   private void setSingleFilter(TextureController controller, int menuId) {
+        controller.clearFilter();
+        controller.addFilter(FilterFactory.getFilter(getResources(), menuId));
+    }
 
-            if (mStreamingView != null && mStreamingView instanceof WebView) {
-                if (!mStreamingView.canScrollHorizontally(-1) && yaw > 0) {
-                    yaw = 0;
-                }
-
-                if (!mStreamingView.canScrollHorizontally(1) && yaw < 0) {
-                    yaw = 0;
-                }
-
-                if (!mStreamingView.canScrollVertically(-1) && pitch > 0) {
-                    pitch = 0;
-                }
-
-                if (!mStreamingView.canScrollVertically(1) && pitch < 0) {
-                    pitch = 0;
-                }
-
-                mStreamingView.scrollBy((int) (-yaw * 3), (int) (-pitch * 3));
-            }
+    public void switchCamera(){
+        cameraId = cameraId == 1 ? 0 : 1;
+        if (mController != null) {
+            mController.destroy();
         }
+        initViewRunnable.run();
+    }*/
 
-        @Override
-        public void onGet3dModelTransition(float x, float y, float z) {
-            ((My3DRenderer) mISurfaceRenderer).setTransition(x, y, z);
+ /*   @Override
+    protected void onResume() {
+        super.onResume();
+        if (mController != null) {
+            mController.onResume();
+            mController.setNeedFrame(mIsNeedFrameCallback);
         }
-
-        @Override
-        public void onGetFaceLandmark(float[] landmarkX, float[] landmarkY, int isMouthOpen) {
-            if (mIsNeedSkinColor) {
-                float x = landmarkX[44] * IMAGE_WIDTH;
-                float y = landmarkY[44] * IMAGE_HEIGHT;
-                mSamplePoint = new PointF(x, y);
-            }
-
-            AFilter aFilter = mController.getLastFilter();
-            if(aFilter != null && aFilter instanceof LandmarkFilter) {
-                ((LandmarkFilter) aFilter).setLandmarks(landmarkX, landmarkY);
-                ((LandmarkFilter) aFilter).setMouthOpen(isMouthOpen);
-            }
-
-            float[] copyLandmarkX = new float[landmarkX.length];
-            float[] copyLandmarkY = new float[landmarkY.length];
-            System.arraycopy(landmarkX, 0, copyLandmarkX, 0, landmarkX.length);
-            System.arraycopy(landmarkY, 0, copyLandmarkY, 0, landmarkY.length);
-            mPresenter.handleChangeModel(copyLandmarkX, copyLandmarkY);
-        }
+    }
 
     @Override
-    public void onGetChangePoint(List<DynamicPoint> mDynamicPoints) {
-        ((My3DRenderer) mISurfaceRenderer).setDynamicPoints(mDynamicPoints);
+    protected void onPause() {
+        super.onPause();
+        if (mController != null) {
+            mController.setNeedFrame(false);
+            mController.onPause();
+        }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mController != null) {
+            mController.setNeedFrame(false);
+            mController.destroy();
+        }
+    }*/
 
     @Override
     public void onFrame(final byte[] bytes, long time) {
-        // 录像有问题，暂时跳过
-        if (mIsNeedFrameCallback && mStreamingView != null && mFrameType != TYPE_RECORD) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    int bitmapWidth = mController.getFrameCallbackWidth();
-                    int bitmapHeight = mController.getFrameCallbackHeight();
-                    Bitmap bitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight,
-                            Bitmap.Config.ARGB_8888);
-                    ByteBuffer b = ByteBuffer.wrap(bytes);
-                    bitmap.copyPixelsFromBuffer(b);
-                    if (mStreamingView != null && mStreamingView instanceof ImageView) {
-                        ((ImageView) mStreamingView).setImageBitmap(bitmap);
-                    }
-                }
-            });
-        }
-
-        if (mIsNeedSkinColor) {  // 获取人脸中心点的颜色
+       /* if (mIsNeedSkinColor) {  // Get the color of the center of the face
             Log.e(TAG, "isNeedSkinColor");
             if (mSamplePoint != null) {
                 Bitmap bitmap = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT,
@@ -524,17 +405,80 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
                 bitmap.recycle();
                 mSamplePoint = null;
                 mIsNeedSkinColor = false;
-                // 根据肤色更改模型贴图的颜色
+                // Change the color of the model's texture based on the skin color
                 ((My3DRenderer) mISurfaceRenderer).setSkinColor(pixel);
             }
 
-        } /*else if (mp4Recorder != null && mFrameType == TYPE_RECORD) {  // 处理录像
-            handleVideoFrame(bytes);
-        }*/ else if (mFrameType == TYPE_PHOTO) {  // 处理拍照
+
+        } else*/
+        if (mFrameType == TYPE_PHOTO) {  // Deal with pictures
             mFrameType = TYPE_NONE;
             handlePhotoFrame(bytes);
         }
     }
+
+    @Override
+    public void onSavePhotoSuccess(final String fileName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "Saved successfully\n" + fileName,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onSavePhotoFailed() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "Unable to save the photo\n",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+    @Override
+    public void onGet3dModelRotation(float pitch, float roll, float yaw) {
+        ((My3DRenderer) mISurfaceRenderer).setAccelerometerValues(roll, yaw, pitch);
+
+
+    }
+
+    @Override
+    public void onGet3dModelTransition(float x, float y, float z) {
+        ((My3DRenderer) mISurfaceRenderer).setTransition(x, y, z);
+    }
+
+    @Override
+    public void onGetFaceLandmark(float[] landmarkX, float[] landmarkY, int isMouthOpen) {
+        if (mIsNeedSkinColor) {
+            float x = landmarkX[44] * IMAGE_WIDTH;
+            float y = landmarkY[44] * IMAGE_HEIGHT;
+            //mSamplePoint = new PointF(x, y);
+        }
+
+        AFilter aFilter = mController.getLastFilter();
+        if(aFilter != null && aFilter instanceof LandmarkFilter) {
+            ((LandmarkFilter) aFilter).setLandmarks(landmarkX, landmarkY);
+            ((LandmarkFilter) aFilter).setMouthOpen(isMouthOpen);
+        }
+
+        float[] copyLandmarkX = new float[landmarkX.length];
+        float[] copyLandmarkY = new float[landmarkY.length];
+        System.arraycopy(landmarkX, 0, copyLandmarkX, 0, landmarkX.length);
+        System.arraycopy(landmarkY, 0, copyLandmarkY, 0, landmarkY.length);
+        mPresenter.handleChangeModel(copyLandmarkX, copyLandmarkY);
+    }
+
+    @Override
+    public void onGetChangePoint(List<DynamicPoint> mDynamicPoints) {
+        ((My3DRenderer) mISurfaceRenderer).setDynamicPoints(mDynamicPoints);
+    }
+
 
     private void handlePhotoFrame(final byte[] bytes) {
         new Thread(new Runnable() {
@@ -545,74 +489,32 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
         }).start();
     }
 
-    private Runnable initViewRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mExecutor = Executors.newSingleThreadExecutor();
-            mController = new TextureController(mContext);
-            // 设置数据源
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mRenderer = new CameraTrackRenderer(mContext, (CameraManager)getSystemService(CAMERA_SERVICE), mController, cameraId);
-                // 人脸检测的回调
-                ((CameraTrackRenderer) mRenderer).setTrackCallBackListener(new CameraTrackRenderer.TrackCallBackListener() {
-                    @Override
-                    public void onTrackDetected(STMobileFaceAction[] faceActions, final int orientation, final int value,
-                                                final float pitch, final float roll, final float yaw,
-                                                final int eye_dist, final int id, final int eyeBlink, final int mouthAh,
-                                                final int headYaw, final int headPitch, final int browJump) {
-                        onTrackDetectedCallback(faceActions, orientation, value,
-                                pitch, roll, yaw, eye_dist, id, eyeBlink, mouthAh, headYaw, headPitch, browJump);
-                    }
-                });
-
-            }else{
-                // Camera1暂时没写人脸检测
-                mRenderer = new Camera1Renderer(mController, cameraId);
-            }
-
-            setContentView();
-
-            mController.setFrameCallback(IMAGE_WIDTH, IMAGE_HEIGHT, MainActivity.this);
-            mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceCreated(SurfaceHolder holder) {
-                    mController.surfaceCreated(holder);
-                    mController.setRenderer(mRenderer);
-                }
-                @Override
-                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                    mController.surfaceChanged(width, height);
-                }
-                @Override
-                public void surfaceDestroyed(SurfaceHolder holder) {
-                    mController.surfaceDestroyed();
-                }
-            });
-        }
-    };
-
-
-    private void onTrackDetectedCallback(STMobileFaceAction[] faceActions, final int orientation, final int value,
-                                         final float pitch, final float roll, final float yaw,
-                                         final int eye_dist, final int id, final int eyeBlink, final int mouthAh,
-                                         final int headYaw, final int headPitch, final int browJump) {
+    private void onTrackDetectedCallback(STMobileFaceAction[] faceActions, final int orientation,
+                                         final int value, final float pitch, final float roll,
+                                         final float yaw, final int eye_dist, final int id,
+                                         final int eyeBlink, final int mouthAh, final int headYaw,
+                                         final int headPitch, final int browJump) {
         // Handle 3D model rotation
         mPresenter.handle3dModelRotation(pitch, roll, yaw);
         //Handle 3D model translation
-        mPresenter.handle3dModelTransition(faceActions, orientation, eye_dist, yaw, PREVIEW_WIDTH, PREVIEW_HEIGHT);
+        mPresenter.handle3dModelTransition(faceActions, orientation, eye_dist, yaw, PREVIEW_WIDTH,
+                PREVIEW_HEIGHT);
         // Handle the key point of the face
-        mPresenter.handleFaceLandmark(faceActions, orientation, mouthAh, PREVIEW_WIDTH, PREVIEW_HEIGHT);
+        mPresenter.handleFaceLandmark(faceActions, orientation, mouthAh, PREVIEW_WIDTH,
+                PREVIEW_HEIGHT);
         // Display face detection parameters
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mTrackText.setText("TRACK: " + value + " MS"
-                        + "\nPITCH: " + pitch + "\nROLL: " + roll + "\nYAW: " + yaw + "\nEYE_DIST:" + eye_dist);
+                        + "\nPITCH: " + pitch + "\nROLL: " + roll + "\nYAW: " + yaw
+                        + "\nEYE_DIST:" + eye_dist);
                 mActionText.setText("ID:" + id + "\nEYE_BLINK:" + eyeBlink + "\nMOUTH_AH:"
-                        + mouthAh + "\nHEAD_YAW:" + headYaw + "\nHEAD_PITCH:" + headPitch + "\nBROW_JUMP:" + browJump);
+                        + mouthAh + "\nHEAD_YAW:" + headYaw + "\nHEAD_PITCH:" + headPitch
+                        + "\nBROW_JUMP:" + browJump);
             }
         });
     }
 
-}
 
+}
