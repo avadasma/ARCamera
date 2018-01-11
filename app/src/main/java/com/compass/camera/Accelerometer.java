@@ -31,7 +31,7 @@ public class Accelerometer {
     /**
      *
      * @param ctx
-     * 用Activity初始化获得传感器
+     *Initialize the sensor with Activity
      */
     public Accelerometer(Context ctx) {
         sensorManager = (SensorManager) ctx
@@ -40,7 +40,7 @@ public class Accelerometer {
     }
 
     /**
-     * 开始对传感器的监听
+     * Start monitoring the sensor
      */
     public void start() {
         if (hasStarted) return;
@@ -52,25 +52,16 @@ public class Accelerometer {
     }
 
     /**
-     * 结束对传感器的监听
-     */
-    public void stop() {
-        if (!hasStarted) return;
-        hasStarted = false;
-        sensorManager.unregisterListener(accListener);
-    }
-
-    /**
      *
      * @return
-     * 返回当前手机转向
+     * Return to the current phone steering
      */
     static public int getDirection() {
         return rotation.getValue();
     }
 
     /**
-     * 传感器与手机转向之间的逻辑
+     * The logic between the sensor and handset steering
      */
     private SensorEventListener accListener = new SensorEventListener() {
 

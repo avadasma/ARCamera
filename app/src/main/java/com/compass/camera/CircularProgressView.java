@@ -54,31 +54,6 @@ public class CircularProgressView extends AppCompatImageView {
         setImageDrawable(mDrawable);
     }
 
-    public void setTotal(int total){
-        this.mTotal = total;
-        mDrawable.invalidateSelf();
-    }
-
-    public void setProcess(int process){
-        this.mProcess = process;
-        post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawable.invalidateSelf();
-            }
-        });
-        Log.e("wuwang","process-->"+process);
-    }
-
-    public int getProcess(){
-        return mProcess;
-    }
-
-    public void setStroke(float dp){
-        this.mStroke = DensityUtils.dp2px(getContext(),dp);
-        mPaint.setStrokeWidth(mStroke);
-        mDrawable.invalidateSelf();
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -101,7 +76,8 @@ public class CircularProgressView extends AppCompatImageView {
             mPaint.setColor(mNormalColor);
             canvas.drawCircle(width/2, width/2, width/2-pd, mPaint);
             mPaint.setColor(mSecondColor);
-            canvas.drawArc(mRectF, mStartAngle, mProcess*360/(float)mTotal, false, mPaint);
+            canvas.drawArc(mRectF, mStartAngle, mProcess*360/(float)mTotal,
+                    false, mPaint);
         }
 
         @Override

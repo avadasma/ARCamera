@@ -25,7 +25,7 @@ public class OrnamentFactory {
         ornaments.add(getNoOrnament());
         ornaments.add(getTigerNose());
         ornaments.add(getVMask());
-        /*ornaments.add(getLaserEye());
+        ornaments.add(getLaserEye());
         ornaments.add(getCamera());
         ornaments.add(getIronMan());
         ornaments.add(getMobile());
@@ -34,7 +34,7 @@ public class OrnamentFactory {
         ornaments.add(getGlasses());
         ornaments.add(getLaptop());
         ornaments.add(getCrystalBall());
-        ornaments.add(getInterview());*/
+        ornaments.add(getInterview());
         return ornaments;
     }
 
@@ -273,7 +273,7 @@ public class OrnamentFactory {
         ornament.setEnableRotation(false);
         ornament.setEnableScale(false);
         ornament.setFrameCallbackType(frameCallbackType);
-        ornament.setSelectFilterId(R.id.menu_camera_negative);
+       // ornament.setSelectFilterId(R.id.menu_camera_negative);
 
         return ornament;
     }
@@ -409,7 +409,7 @@ public class OrnamentFactory {
 //        modelList.add(crystalBall);
         ornament.setModelList(modelList);
         ornament.setFrameCallbackType(TextureController.FRAME_CALLBACK_FILTER);
-        ornament.setSelectFilterId(R.id.menu_camera_negative);
+        //ornament.setSelectFilterId(R.id.menu_camera_negative);
 
         return ornament;
     }

@@ -17,6 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
 
     private Context mContext;
     private ARCamPresenter mPresenter;
-
+    private RelativeLayout mLayoutRoot;
     // Used to render the camera preview
     private SurfaceView mSurfaceView;
 
@@ -61,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
 
     // Camera Id, rear set to 0, front set to 1
     private int cameraId = 1;
-
-    //The default camera filter id
-    protected int mCurrentFilterId = R.id.menu_camera_default;
 
     // Accelerometer tools seem to be used for face detection
     private static Accelerometer mAccelerometer;
@@ -218,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
 
 
     private void initCommonView() {
-        //mLayoutRoot = (RelativeLayout) findViewById(R.id.layout_root);
+        mLayoutRoot = (RelativeLayout) findViewById(R.id.layout_root);
         mTrackText = (TextView) findViewById(R.id.tv_track);
         mActionText = (TextView) findViewById(R.id.tv_action);
     }
@@ -251,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
                 .setBackgroundResource(android.R.color.transparent);
 
         mOrnaments.addAll(OrnamentFactory.getPresetOrnament());
-        // mOrnaments.addAll(OrnamentFactory.getPresetMask());
+        mOrnaments.addAll(OrnamentFactory.getPresetMask());
         mOrnamentAdapter.notifyDataSetChanged();
     }
 

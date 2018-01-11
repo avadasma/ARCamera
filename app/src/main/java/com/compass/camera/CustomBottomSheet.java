@@ -17,13 +17,6 @@ public class CustomBottomSheet extends BottomSheetDialog {
         super(context);
     }
 
-    public CustomBottomSheet(@NonNull Context context, @StyleRes int theme) {
-        super(context, theme);
-    }
-
-    protected CustomBottomSheet(@NonNull Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +24,8 @@ public class CustomBottomSheet extends BottomSheetDialog {
         int screenHeight = getScreenHeight(getContext());
         int statusBarHeight = getStatusBarHeight(getContext());
         int dialogHeight = screenHeight - statusBarHeight;
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight == 0 ? ViewGroup.LayoutParams.MATCH_PARENT : dialogHeight);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight == 0 ?
+                ViewGroup.LayoutParams.MATCH_PARENT : dialogHeight);
     }
 
     private int getScreenHeight(Context context) {
@@ -41,7 +35,8 @@ public class CustomBottomSheet extends BottomSheetDialog {
 
     private int getStatusBarHeight(Context context) {
         int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = context.getResources().getIdentifier("status_bar_height",
+                "dimen", "android");
         if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
