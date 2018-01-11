@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.gl;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -12,6 +12,9 @@ import com.compass.camera.camera.AFilter;
 import com.compass.camera.camera.GroupFilter;
 import com.compass.camera.camera.NoFilter;
 import com.compass.camera.camera.TextureFilter;
+import com.compass.camera.iCallBacks.FrameCallback;
+import com.compass.camera.iCallBacks.MyRenderer;
+import com.compass.camera.utils.MatrixUtils;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;

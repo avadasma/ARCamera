@@ -1,4 +1,6 @@
-package com.compass.camera;
+package com.compass.camera.gl;
+
+import com.compass.camera.R;
 
 import org.rajawali3d.materials.Material;
 import org.rajawali3d.materials.methods.DiffuseMethod;

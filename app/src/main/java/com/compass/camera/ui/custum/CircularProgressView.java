@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.ui.custum;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,6 +12,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
+
+import com.compass.camera.utils.DensityUtils;
 
 /**
  * Created by Simon on 2017/7/15.

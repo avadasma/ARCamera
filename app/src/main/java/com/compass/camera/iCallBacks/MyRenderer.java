@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.iCallBacks;
 
 import android.opengl.GLSurfaceView;
 

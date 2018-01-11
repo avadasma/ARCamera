@@ -1,7 +1,10 @@
-package com.compass.camera;
+package com.compass.camera.model;
 
 import android.graphics.Color;
 
+import com.compass.camera.gl.MaterialFactory;
+import com.compass.camera.R;
+import com.compass.camera.gl.TextureController;
 import com.compass.camera.rajawali.CustomMaterialPlugin;
 import com.compass.camera.rajawali.CustomVertexShaderMaterialPlugin;
 

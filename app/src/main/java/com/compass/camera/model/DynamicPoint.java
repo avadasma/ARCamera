@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.model;
 
 /**
  * Created by Simon on 2017/7/18.

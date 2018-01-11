@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+
+import com.compass.camera.model.Ornament;
+import com.compass.camera.R;
 
 import java.util.List;
 
