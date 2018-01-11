@@ -409,7 +409,7 @@ public class OrnamentFactory {
 //        modelList.add(crystalBall);
         ornament.setModelList(modelList);
         ornament.setFrameCallbackType(TextureController.FRAME_CALLBACK_FILTER);
-        //ornament.setSelectFilterId(R.id.menu_camera_negative);
+       // ornament.setSelectFilterId(R.id.menu_camera_negative);
 
         return ornament;
     }
