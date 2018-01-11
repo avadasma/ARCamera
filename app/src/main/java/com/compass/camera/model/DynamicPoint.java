@@ -21,10 +21,6 @@ public class DynamicPoint {
         return index;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public float getX() {
         return x;
     }

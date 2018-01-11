@@ -10,7 +10,7 @@ import com.compass.camera.gl.EasyGlUtils;
 import java.nio.ByteBuffer;
 
 /**
- * Created by Simon on 2017/7/5.
+ * Created by kavya on 10/1/18.
  */
 
 public class TextureFilter extends AFilter  {
@@ -26,16 +26,10 @@ public class TextureFilter extends AFilter  {
     private SurfaceTexture mSurfaceTexture;
     private float[] mCoordOM = new float[16];
 
-    //获取Track数据
-    private ByteBuffer tBuffer;
 
     public TextureFilter(Resources mRes) {
         super(mRes);
         mFilter=new CameraFilter(mRes);
-    }
-
-    public void setCoordMatrix(float[] matrix){
-        mFilter.setCoordMatrix(matrix);
     }
 
     public SurfaceTexture getTexture(){
@@ -98,10 +92,11 @@ public class TextureFilter extends AFilter  {
         if(this.width!=width||this.height!=height){
             this.width=width;
             this.height=height;
-            //创建FrameBuffer和Texture
+            //Create FrameBuffer and Texture
             deleteFrameBuffer();
             GLES20.glGenFramebuffers(1, fFrame, 0);
-            EasyGlUtils.genTexturesWithParameter(1, fTexture,0,GLES20.GL_RGBA,width,height);
+            EasyGlUtils.genTexturesWithParameter(1, fTexture,0,GLES20.GL_RGBA,width,
+                    height);
         }
     }
 

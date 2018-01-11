@@ -38,7 +38,6 @@ public class OrnamentFactory {
         ornaments.add(getLaptop());
         ornaments.add(getCrystalBall());
         ornaments.add(getInterview());
-
         return ornaments;
     }
 
@@ -277,7 +276,7 @@ public class OrnamentFactory {
         ornament.setEnableRotation(false);
         ornament.setEnableScale(false);
         ornament.setFrameCallbackType(frameCallbackType);
-        ornament.setSelectFilterId(R.id.menu_camera_negative);
+       // ornament.setSelectFilterId(R.id.menu_camera_negative);
 
         return ornament;
     }
@@ -413,7 +412,7 @@ public class OrnamentFactory {
 //        modelList.add(crystalBall);
         ornament.setModelList(modelList);
         ornament.setFrameCallbackType(TextureController.FRAME_CALLBACK_FILTER);
-        ornament.setSelectFilterId(R.id.menu_camera_negative);
+       // ornament.setSelectFilterId(R.id.menu_camera_negative);
 
         return ornament;
     }
