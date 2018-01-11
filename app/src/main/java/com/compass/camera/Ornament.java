@@ -44,7 +44,7 @@ public class Ornament {
     private float planeOffsetZ;
 
     private int frameCallbackType = TextureController.FRAME_CALLBACK_DEFAULT;
-    private int selectFilterId = R.id.menu_camera_default;
+    //private int selectFilterId = R.id.menu_camera_default;
 
 
     public int getType() {
@@ -107,56 +107,28 @@ public class Ornament {
         return scale;
     }
 
-    public void setScale(float scale) {
-        this.scale = scale;
-    }
-
     public float getOffsetX() {
         return offsetX;
-    }
-
-    public void setOffsetX(float offsetX) {
-        this.offsetX = offsetX;
     }
 
     public float getOffsetY() {
         return offsetY;
     }
 
-    public void setOffsetY(float offsetY) {
-        this.offsetY = offsetY;
-    }
-
     public float getOffsetZ() {
         return offsetZ;
-    }
-
-    public void setOffsetZ(float offsetZ) {
-        this.offsetZ = offsetZ;
     }
 
     public float getRotateX() {
         return rotateX;
     }
 
-    public void setRotateX(float rotateX) {
-        this.rotateX = rotateX;
-    }
-
     public float getRotateY() {
         return rotateY;
     }
 
-    public void setRotateY(float rotateY) {
-        this.rotateY = rotateY;
-    }
-
     public float getRotateZ() {
         return rotateZ;
-    }
-
-    public void setRotateZ(float rotateZ) {
-        this.rotateZ = rotateZ;
     }
 
     public boolean isEnableRotation() {
@@ -181,10 +153,6 @@ public class Ornament {
 
     public void setEnableScale(boolean enableScale) {
         this.enableScale = enableScale;
-    }
-
-    public String getToastMsg() {
-        return toastMsg;
     }
 
     public void setToastMsg(String toastMsg) {
@@ -219,16 +187,8 @@ public class Ornament {
         return planeOffsetX;
     }
 
-    public void setPlaneOffsetX(float planeOffsetX) {
-        this.planeOffsetX = planeOffsetX;
-    }
-
     public float getPlaneOffsetY() {
         return planeOffsetY;
-    }
-
-    public void setPlaneOffsetY(float planeOffsetY) {
-        this.planeOffsetY = planeOffsetY;
     }
 
     public float getPlaneOffsetZ() {
@@ -239,21 +199,17 @@ public class Ornament {
         this.planeOffsetZ = planeOffsetZ;
     }
 
-    public int getFrameCallbackType() {
-        return frameCallbackType;
-    }
-
     public void setFrameCallbackType(int frameCallbackType) {
         this.frameCallbackType = frameCallbackType;
     }
 
-    public int getSelectFilterId() {
+   /* public int getSelectFilterId() {
         return selectFilterId;
     }
 
     public void setSelectFilterId(int selectFilterId) {
         this.selectFilterId = selectFilterId;
-    }
+    }*/
 
     public static class Model {
 
@@ -406,13 +362,7 @@ public class Ornament {
             this.color = color;
         }
 
-        public List<Animation3D> getAnimation3Ds() {
-            return animation3Ds;
-        }
 
-        public void setAnimation3Ds(List<Animation3D> animation3Ds) {
-            this.animation3Ds = animation3Ds;
-        }
 
         public int getTextureResId() {
             return textureResId;
@@ -430,13 +380,6 @@ public class Ornament {
             this.texturePath = texturePath;
         }
 
-        public boolean isDynamic() {
-            return isDynamic;
-        }
-
-        public void setDynamic(boolean isDynamic) {
-            this.isDynamic = isDynamic;
-        }
 
         public boolean isNeedSkinColor() {
             return needSkinColor;
@@ -478,9 +421,6 @@ public class Ornament {
             return beforeX;
         }
 
-        public void setBeforeX(float beforeX) {
-            this.beforeX = beforeX;
-        }
 
         public float getBeforeY() {
             return beforeY;
@@ -502,9 +442,6 @@ public class Ornament {
             return afterX;
         }
 
-        public void setAfterX(float afterX) {
-            this.afterX = afterX;
-        }
 
         public float getAfterY() {
             return afterY;
@@ -550,17 +487,11 @@ public class Ornament {
             return axisY;
         }
 
-        public void setAxisY(int axisY) {
-            this.axisY = axisY;
-        }
 
         public int getAxisZ() {
             return axisZ;
         }
 
-        public void setAxisZ(int axisZ) {
-            this.axisZ = axisZ;
-        }
 
         public boolean isNeedStreaming() {
             return needStreaming;
@@ -570,25 +501,16 @@ public class Ornament {
             this.needStreaming = needStreaming;
         }
 
-        public int getStreamingViewType() {
-            return streamingViewType;
-        }
 
         public void setStreamingViewType(int streamingViewType) {
             this.streamingViewType = streamingViewType;
         }
 
-        public int getStreamingViewWidth() {
-            return streamingViewWidth;
-        }
 
         public void setStreamingViewWidth(int streamingViewWidth) {
             this.streamingViewWidth = streamingViewWidth;
         }
 
-        public int getStreamingViewHeight() {
-            return streamingViewHeight;
-        }
 
         public void setStreamingViewHeight(int streamingViewHeight) {
             this.streamingViewHeight = streamingViewHeight;
@@ -634,9 +556,6 @@ public class Ornament {
             this.streamingModelSegmentsH = streamingModelSegmentsH;
         }
 
-        public float getStreamingScale() {
-            return streamingScale;
-        }
 
         public void setStreamingScale(float streamingScale) {
             this.streamingScale = streamingScale;
@@ -670,17 +589,10 @@ public class Ornament {
             return streamingRotateX;
         }
 
-        public void setStreamingRotateX(float streamingRotateX) {
-            this.streamingRotateX = streamingRotateX;
-        }
-
         public float getStreamingRotateY() {
             return streamingRotateY;
         }
 
-        public void setStreamingRotateY(float streamingRotateY) {
-            this.streamingRotateY = streamingRotateY;
-        }
 
         public float getStreamingRotateZ() {
             return streamingRotateZ;
@@ -734,41 +646,27 @@ public class Ornament {
             return buildInType;
         }
 
-        public void setBuildInType(int buildInType) {
-            this.buildInType = buildInType;
-        }
 
         public float getBuildInWidth() {
             return buildInWidth;
         }
 
-        public void setBuildInWidth(float buildInWidth) {
-            this.buildInWidth = buildInWidth;
-        }
 
         public float getBuildInHeight() {
             return buildInHeight;
         }
 
-        public void setBuildInHeight(float buildInHeight) {
-            this.buildInHeight = buildInHeight;
-        }
 
         public int getBuildInSegmentsW() {
             return buildInSegmentsW;
         }
 
-        public void setBuildInSegmentsW(int buildInSegmentsW) {
-            this.buildInSegmentsW = buildInSegmentsW;
-        }
 
         public int getBuildInSegmentsH() {
             return buildInSegmentsH;
         }
 
-        public void setBuildInSegmentsH(int buildInSegmentsH) {
-            this.buildInSegmentsH = buildInSegmentsH;
-        }
+
 
         public int getMaterialId() {
             return materialId;

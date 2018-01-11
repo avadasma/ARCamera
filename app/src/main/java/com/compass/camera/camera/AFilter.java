@@ -15,56 +15,51 @@ import java.nio.ShortBuffer;
 import java.util.Arrays;
 
 /**
- * Created by Simon on 2017/7/5.
+ * Created by kavya on 10/1/18.
  */
 
 public abstract class AFilter {
     private final static String TAG = AFilter.class.getSimpleName();
-
-    public static final int KEY_OUT = 0x101;
-    public static final int KEY_IN = 0x102;
-    public static final int KEY_INDEX = 0x201;
-
     public static boolean DEBUG = true;
     /**
-     * 单位矩阵
+     * Unit matrix
      */
     public static final float[] OM = MatrixUtils.getOriginalMatrix();
     /**
-     * 程序句柄
+     * Program handle
      */
     protected int mProgram;
     /**
-     * 顶点坐标句柄
+     *Vertex coordinate handle
      */
     protected int mHPosition;
     /**
-     * 纹理坐标句柄
+     * Texture coordinate handle
      */
     protected int mHCoord;
     /**
-     * 总变换矩阵句柄
+     * Total transformation matrix handle
      */
     protected int mHMatrix;
     /**
-     * 默认纹理贴图句柄
+     * The default texture map handle
      */
     protected int mHTexture;
 
     protected Resources mRes;
 
     /**
-     * 顶点坐标Buffer
+     * Vertex coordinates Buffer
      */
     protected FloatBuffer mVerBuffer;
 
     /**
-     * 纹理坐标Buffer
+     * Texture coordinates Buffer
      */
     protected FloatBuffer mTexBuffer;
 
     /**
-     * 索引坐标Buffer
+     *Index coordinates Buffer
      */
     protected ShortBuffer mindexBuffer;
 
@@ -72,9 +67,11 @@ public abstract class AFilter {
 
     private float[] matrix = Arrays.copyOf(OM, 16);
 
-    private int textureType = 0;      //默认使用Texture2D0
+    //Texture2D0 is used by default
+    private int textureType = 0;
     private int textureId = 0;
-    //顶点坐标
+
+    //Vertex coordinates
     private float pos[] = {
             -1.0f,  1.0f,
             -1.0f, -1.0f,
@@ -82,7 +79,7 @@ public abstract class AFilter {
             1.0f,  -1.0f,
     };
 
-    //纹理坐标
+    //Texture coordinates
     private float[] coord={
             0.0f, 0.0f,
             0.0f,  1.0f,
@@ -123,9 +120,6 @@ public abstract class AFilter {
         return matrix;
     }
 
-    public final void setTextureType(int type){
-        this.textureType = type;
-    }
 
     public final int getTextureType(){
         return textureType;
@@ -147,55 +141,22 @@ public abstract class AFilter {
         return mFlag;
     }
 
-    public void setFloat(int type, float ... params){
-        if(mFloats == null){
-            mFloats = new SparseArray<>();
-        }
-        mFloats.put(type, params);
-    }
+
     public void setInt(int type, int ... params){
         if(mInts == null){
             mInts = new SparseArray<>();
         }
         mInts.put(type, params);
     }
-    public void setBool(int type, boolean ... params){
-        if(mBools == null){
-            mBools = new SparseArray<>();
-        }
-        mBools.put(type, params);
-    }
 
-    public boolean getBool(int type, int index) {
-        if (mBools == null) return false;
-        boolean[] b = mBools.get(type);
-        return !(b == null || b.length <= index) && b[index];
-    }
 
-    public int getInt(int type, int index){
-        if (mInts == null) return 0;
-        int[] b = mInts.get(type);
-        if(b == null || b.length <= index){
-            return 0;
-        }
-        return b[index];
-    }
-
-    public float getFloat(int type, int index){
-        if (mFloats == null) return 0;
-        float[] b = mFloats.get(type);
-        if(b == null || b.length <= index){
-            return 0;
-        }
-        return b[index];
-    }
 
     public int getOutputTexture(){
         return -1;
     }
 
     /**
-     * 实现此方法，完成程序的创建，可直接调用createProgram来实现
+     * To complete the creation of the program, you can directly call createProgram to achieve
      */
     protected abstract void onCreate();
     protected abstract void onSizeChanged(int width, int height);
@@ -213,7 +174,7 @@ public abstract class AFilter {
     }
 
     /**
-     * Buffer初始化
+     * Buffer initialization
      */
     protected void initBuffer(){
         ByteBuffer a = ByteBuffer.allocateDirect(32);
@@ -233,7 +194,7 @@ public abstract class AFilter {
     }
 
     /**
-     * 启用顶点坐标和纹理坐标进行绘制
+     * Enable vertex coordinates and texture coordinates for drawing
      */
     protected void onDraw(){
         GLES20.glEnableVertexAttribArray(mHPosition);
@@ -246,7 +207,7 @@ public abstract class AFilter {
     }
 
     /**
-     * 清除画布
+     * Clear the canvas
      */
     protected void onClear(){
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -254,14 +215,14 @@ public abstract class AFilter {
     }
 
     /**
-     * 设置其他扩展数据
+     * Set other extended data
      */
     protected void onSetExpandData(){
         GLES20.glUniformMatrix4fv(mHMatrix, 1, false, matrix, 0);
     }
 
     /**
-     * 绑定默认纹理
+     * Bind the default texture
      */
     protected void onBindTexture(){
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + textureType);
@@ -275,7 +236,7 @@ public abstract class AFilter {
         }
     }
 
-    //通过路径加载Assets中的文本内容
+    //Load text content in Assets by path
     public static String uRes(Resources mRes, String path){
         StringBuilder result = new StringBuilder();
         try{
@@ -291,7 +252,7 @@ public abstract class AFilter {
         return result.toString().replaceAll("\\r\\n", "\n");
     }
 
-    //创建GL程序
+    //Create a GL program
     public static int uCreateGlProgram(String vertexSource, String fragmentSource){
         int vertex = uLoadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
         if (vertex == 0) return 0;
@@ -313,7 +274,7 @@ public abstract class AFilter {
         return program;
     }
 
-    //加载shader
+    //Loading shader
     public static int uLoadShader(int shaderType, String source){
         int shader = GLES20.glCreateShader(shaderType);
         if(0 != shader){
