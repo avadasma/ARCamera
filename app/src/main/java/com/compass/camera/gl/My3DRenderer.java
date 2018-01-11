@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.gl;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,8 +15,12 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 
+import com.compass.camera.model.DynamicPoint;
+import com.compass.camera.model.Ornament;
+import com.compass.camera.model.OrnamentFactory;
 import com.compass.camera.rajawali.MyFragmentShader;
 import com.compass.camera.rajawali.MyVertexShader;
+import com.compass.camera.utils.BitmapUtils;
 
 import org.rajawali3d.Geometry3D;
 import org.rajawali3d.Object3D;
@@ -59,20 +63,20 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
     private boolean mIsOrnamentVisible = true;
     private int mScreenW = 1;
     private int mScreenH = 1;
-    // 根据肤色更改模型贴图的颜色
+    //Change the color of the model's texture based on the skin color
     private int mSkinColor = 0xffd4c9b5;
 
     private int mModelType = Ornament.MODEL_TYPE_NONE;
-    // 用于静态3D模型
+    // For static 3D models
     private Vector3 mAccValues;
     private float mTransX = 0.0f;
     private float mTransY = 0.0f;
     private float mScale = 1.0f;
-    // 用于动态3D模型
+    // For dynamic 3D models
     private List<Geometry3D> mGeometry3DList = new ArrayList<>();
     private List<DynamicPoint> mPoints = new ArrayList<>();
     private boolean mIsChanging = false;
-    // 用于ShaderMaterial模型
+    // Used for ShaderMaterial models
     private List<Material> mMaterialList = new ArrayList<>();
     private float mMaterialTime = 0;
     private ObjectColorPicker mPicker;
@@ -94,7 +98,7 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                     final Canvas canvas = mSurface.lockCanvas(null);
                     canvas.translate(mStreamingView.getScrollX(), -mStreamingView.getScrollY());
                     if (mIsStreamingViewMirror) {
-                        // 镜像
+                        // Mirror
                         canvas.scale(-1, 1, mStreamingView.getWidth() / 2, mStreamingView.getHeight() / 2);
                     }
                     mStreamingTexture.getSurfaceTexture().getTransformMatrix(mMatrix);
@@ -123,17 +127,17 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         this.mIsNeedUpdateOrnament = mIsNeedUpdateOrnament;
     }
 
-    // 设置装饰品可见性
+    // Set ornament visibility
     public void setIsOrnamentVisible(boolean mIsOrnamentVisible) {
         this.mIsOrnamentVisible = mIsOrnamentVisible;
     }
 
-    // 设置3D模型的转动角度
+    // Set the 3D model's rotation angle
     public void setAccelerometerValues(float x, float y, float z) {
         mAccValues.setAll(x, y, z);
     }
 
-    // 设置3D模型的平移
+    // Set the translation of the 3D model
     public void setTransition(float x, float y, float z) {
         if (mModelType == Ornament.MODEL_TYPE_STATIC || mModelType == Ornament.MODEL_TYPE_SHADER) {
             mTransX = x;
@@ -142,7 +146,7 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         }
     }
 
-    // 设置3D模型的缩放比例
+    // Set the scale of the 3D model
     public void setScale(float scale) {
         mScale = scale;
     }
@@ -193,17 +197,17 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         if (mModelType == Ornament.MODEL_TYPE_STATIC || mModelType == Ornament.MODEL_TYPE_SHADER) {
             if (mOrnamentModel != null) {
                 if (mOrnamentModel.isEnableRotation()) {
-                    // 处理3D模型的旋转
+                    // Handle 3D model rotation
                     mContainer.setRotation(mAccValues.x, mAccValues.y, mAccValues.z);
                 }
 
                 if (mOrnamentModel.isEnableScale()) {
-                    // 处理3D模型的缩放
+                    // Handles scaling of 3D models
                     mContainer.setScale(mScale);
                 }
 
                 if (mOrnamentModel.isEnableTransition()) {
-                    // 处理3D模型的平移
+                    // Handle 3D model translation
                     getCurrentCamera().setX(mTransX);
                     getCurrentCamera().setY(mTransY);
                 }
@@ -539,7 +543,7 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
             Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), textureResId);
             if (bitmap != null) {
                 mIsChanging = true;
-                // 调整肤色
+                // Adjust the color
                 if (model.isNeedSkinColor()) {
                     bitmap = changeSkinColor(bitmap, mSkinColor);
                 }
@@ -638,7 +642,7 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
 
             String texturePath = model.getTexturePath();
             Bitmap bitmap = BitmapUtils.decodeSampledBitmapFromFilePath(texturePath, 300, 300);
-            // 调整肤色
+                // Adjust the color
             if (model.isNeedSkinColor()) {
                 bitmap = changeSkinColor(bitmap, mSkinColor);
             }
@@ -788,11 +792,12 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                     int blue = Color.blue(pixel);
 
                     // TODO
-                    // 将肤色与该点颜色进行混合
-                    // 在Photoshop里面看，“柔光”的效果是比较合适的。 “叠加”也类似，不过画面有点过饱和
-                    // 调色层在顶层并设为“柔光”，和人脸层在顶层并设为“柔光”是不同的
-                    // 理想的效果是前者，但是在网上找到的“柔光”代码实现的是后者
-                    // 由于没弄明白怎么改写，暂时先用“叠加”效果，然后降低饱和度
+                    // Reduce the saturation
+                    // In Photoshop, "soft light" effect is more appropriate. "Overlay" is similar, but the picture is a little over-saturated
+                    // The color palette is set at the top level and set to "Soft Light", which is different from the face layer set to "Soft Light" at the top level
+                    //The ideal effect is the former, but the "soft" code found online is the latter
+                    // Because I did not understand how to rewrite, temporarily use the "overlay" effect, and then reduce the saturation
+
                     red = overlay(skinRed, red);
                     green = overlay(skinGreen, green);
                     blue = overlay(skinBlue, blue);
@@ -802,7 +807,7 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                 }
             }
 
-            // 降低饱和度
+            // Reduce the saturation
             float saturation = 0.35f;
             ColorMatrix cMatrix = new ColorMatrix();
             cMatrix.setSaturation(saturation);
@@ -818,12 +823,12 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         return null;
     }
 
-    // 混合模式 -- 柔光
+    // Mixed mode - soft light
     private int softLight(int A, int B) {
         return (B < 128) ? (2 * ((A >> 1) + 64)) * (B / 255) : (255 - (2 * (255 - ((A >> 1) + 64)) * (255 - B) / 255));
     }
 
-    // 混合模式 -- 叠加
+    // Mixed mode - soft light
     private int overlay(int A, int B) {
         return ((B < 128) ? (2 * A * B / 255) : (255 - 2 * (255 - A) * (255 - B) / 255));
     }

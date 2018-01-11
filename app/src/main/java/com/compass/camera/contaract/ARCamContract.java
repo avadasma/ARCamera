@@ -1,7 +1,8 @@
-package com.compass.camera;
+package com.compass.camera.contaract;
 
 import android.graphics.Bitmap;
 
+import com.compass.camera.model.DynamicPoint;
 import com.sensetime.stmobileapi.STMobileFaceAction;
 
 import java.util.List;

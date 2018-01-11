@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.utils;
 
 import android.Manifest;
 import android.app.Activity;

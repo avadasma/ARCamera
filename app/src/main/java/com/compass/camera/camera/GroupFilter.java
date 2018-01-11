@@ -3,8 +3,6 @@ package com.compass.camera.camera;
 import android.content.res.Resources;
 import android.opengl.GLES20;
 
-import com.compass.camera.MatrixUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;

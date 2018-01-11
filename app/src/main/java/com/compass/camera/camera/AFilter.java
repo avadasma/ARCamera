@@ -5,7 +5,7 @@ import android.opengl.GLES20;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.compass.camera.MatrixUtils;
+import com.compass.camera.utils.MatrixUtils;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;

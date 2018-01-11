@@ -1,4 +1,7 @@
-package com.compass.camera;
+package com.compass.camera.model;
+
+import com.compass.camera.R;
+import com.compass.camera.gl.TextureController;
 
 import org.rajawali3d.Object3D;
 import org.rajawali3d.animation.Animation3D;

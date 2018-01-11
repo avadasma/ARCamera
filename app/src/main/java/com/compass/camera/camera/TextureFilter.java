@@ -5,7 +5,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.compass.camera.EasyGlUtils;
+import com.compass.camera.gl.EasyGlUtils;
 
 import java.nio.ByteBuffer;
 

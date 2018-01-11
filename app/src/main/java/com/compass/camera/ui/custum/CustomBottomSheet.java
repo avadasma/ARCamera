@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.ui.custum;
 
 import android.content.Context;
 import android.os.Bundle;

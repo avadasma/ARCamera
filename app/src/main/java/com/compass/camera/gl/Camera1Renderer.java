@@ -1,7 +1,9 @@
-package com.compass.camera;
+package com.compass.camera.gl;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+
+import com.compass.camera.iCallBacks.MyRenderer;
 
 import java.io.IOException;
 

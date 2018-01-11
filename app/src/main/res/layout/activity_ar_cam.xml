@@ -33,7 +33,7 @@
         surfaceview:renderMode="RENDER_WHEN_DIRTY"/>
 
     <!--Camera \ video button-->
-    <com.compass.camera.CircularProgressView
+    <com.compass.camera.ui.custum.CircularProgressView
         android:id="@+id/btn_capture"
         android:layout_width="80dp"
         android:layout_height="80dp"

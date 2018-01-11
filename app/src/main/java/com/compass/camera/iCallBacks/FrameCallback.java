@@ -1,4 +1,4 @@
-package com.compass.camera;
+package com.compass.camera.iCallBacks;
 
 /**
  * Created by kavya on 10/1/18.
