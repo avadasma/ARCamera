@@ -73,7 +73,8 @@ public class CameraTrackRenderer implements MyRenderer {
     private Handler mInferenceHandler;
 
 
-    public CameraTrackRenderer(Context context, CameraManager cameraManager, TextureController mController, int cameraId) {
+    public CameraTrackRenderer(Context context, CameraManager cameraManager,
+                               TextureController mController, int cameraId) {
         this.mCameraManager = cameraManager;
         this.mController = mController;
         this.cameraId = cameraId;
@@ -110,14 +111,16 @@ public class CameraTrackRenderer implements MyRenderer {
             }
 
             CameraCharacteristics c = mCameraManager.getCameraCharacteristics(cameraId + "");
-            StreamConfigurationMap map = c.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            StreamConfigurationMap map = c.get(CameraCharacteristics.
+                    SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
             Size[] sizes = map.getOutputSizes(SurfaceHolder.class);
             //Custom rules, choose a size
             mPreviewSize = sizes[0];
             mController.setDataSize(mPreviewSize.getHeight(), mPreviewSize.getWidth());
 
-            imageReader = ImageReader.newInstance(PREVIEW_WIDTH, PREVIEW_HEIGHT, ImageFormat.YUV_420_888, 2);
+            imageReader = ImageReader.newInstance(PREVIEW_WIDTH, PREVIEW_HEIGHT,
+                    ImageFormat.YUV_420_888, 2);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -131,23 +134,29 @@ public class CameraTrackRenderer implements MyRenderer {
                     mDevice = camera;
                     try {
                         Surface surface = new Surface(mController.getTexture());
-                        final CaptureRequest.Builder builder = mDevice.createCaptureRequest(TEMPLATE_PREVIEW);
+                        final CaptureRequest.Builder builder = mDevice.createCaptureRequest
+                                (TEMPLATE_PREVIEW);
                         builder.addTarget(surface);
                         builder.addTarget(imageReader.getSurface());
-                        mController.getTexture().setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+                        mController.getTexture().setDefaultBufferSize(mPreviewSize.getWidth(),
+                                mPreviewSize.getHeight());
 
-                        mDevice.createCaptureSession(Arrays.asList(surface, imageReader.getSurface()), new
-                                CameraCaptureSession.StateCallback() {
+                        mDevice.createCaptureSession(Arrays.asList(surface,
+                                imageReader.getSurface()), new CameraCaptureSession.StateCallback()
+                        {
                                     @Override
-                                    public void onConfigured(@NonNull CameraCaptureSession session) {
+                                    public void onConfigured(@NonNull CameraCaptureSession session)
+                                    {
                                         try {
-                                            session.setRepeatingRequest(builder.build(), new CameraCaptureSession.CaptureCallback() {
+                                            session.setRepeatingRequest(builder.build(),
+                                                    new CameraCaptureSession.CaptureCallback() {
                                                 @Override
                                                 public void onCaptureProgressed(
                                                         @NonNull CameraCaptureSession session,
                                                         @NonNull CaptureRequest request,
                                                         @NonNull CaptureResult partialResult) {
-                                                    super.onCaptureProgressed(session, request, partialResult);
+                                                    super.onCaptureProgressed(session, request,
+                                                            partialResult);
                                                 }
 
                                                 @Override
@@ -155,7 +164,8 @@ public class CameraTrackRenderer implements MyRenderer {
                                                         @NonNull CameraCaptureSession session,
                                                         @NonNull CaptureRequest request,
                                                         @NonNull TotalCaptureResult result) {
-                                                    super.onCaptureCompleted(session, request, result);
+                                                    super.onCaptureCompleted(session, request,
+                                                            result);
                                                     mController.requestRender();
                                                 }
                                             },mHandler);
@@ -165,7 +175,8 @@ public class CameraTrackRenderer implements MyRenderer {
                                     }
 
                                     @Override
-                                    public void onConfigureFailed(@NonNull CameraCaptureSession session) {
+                                    public void onConfigureFailed(@NonNull CameraCaptureSession
+                                                                          session) {
                                     }
 
                                 }, mHandler);
@@ -215,8 +226,10 @@ public class CameraTrackRenderer implements MyRenderer {
                     try {
                         long startTime = System.currentTimeMillis();
 
-                        CameraCharacteristics characteristics = mCameraManager.getCameraCharacteristics(String.valueOf(cameraId));
-                        int orientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+                        CameraCharacteristics characteristics = mCameraManager.
+                                getCameraCharacteristics(String.valueOf(cameraId));
+                        int orientation = characteristics.get(CameraCharacteristics.
+                                SENSOR_ORIENTATION);
                         boolean frontCamera = (cameraId == 1);
                         int direction = Accelerometer.getDirection();
 
@@ -226,7 +239,8 @@ public class CameraTrackRenderer implements MyRenderer {
                             direction = (direction ^ 2);
                         }
 
-                        STMobileFaceAction[] faceActions = tracker.trackFaceAction(nv21, direction, PREVIEW_WIDTH, PREVIEW_HEIGHT);
+                        STMobileFaceAction[] faceActions = tracker.trackFaceAction(nv21,
+                                direction, PREVIEW_WIDTH, PREVIEW_HEIGHT);
 
                         long endTime = System.currentTimeMillis();
                         float trackTime = endTime - startTime;
@@ -235,14 +249,16 @@ public class CameraTrackRenderer implements MyRenderer {
                         Log.i(TAG, "track time: " + trackTime);
 
                         if (faceActions != null && faceActions.length > 0) {
-                            Log.i(TAG, "-->> faceActions: faceActions[0].face=" + faceActions[0].face.rect.toString() + ", " +
+                            Log.i(TAG, "-->> faceActions: faceActions[0].face=" +
+                                    faceActions[0].face.rect.toString() + ", " +
                                     "pitch = " + faceActions[0].face.pitch + ", " +
                                     "roll=" + faceActions[0].face.roll + ", " +
                                     "yaw=" + faceActions[0].face.yaw + ", " +
                                     "face_action = " + faceActions[0].face_action + ", " +
                                     "face_count = " + faceActions.length);
                             if (trackCallBackListener != null) {
-                                trackCallBackListener.onTrackDetected(faceActions, orientation, (int) trackTime,
+                                trackCallBackListener.onTrackDetected(faceActions, orientation,
+                                        (int) trackTime,
                                         faceActions[0].face.pitch,
                                         faceActions[0].face.roll,
                                         faceActions[0].face.yaw,
@@ -278,7 +294,8 @@ public class CameraTrackRenderer implements MyRenderer {
     public interface TrackCallBackListener {
         void onTrackDetected(STMobileFaceAction[] faceActions, int orientation,
                              int value, float pitch, float roll, float yaw, int eye_dist,
-                             int id, int eyeBlink, int mouthAh, int headYaw, int headPitch, int browJump);
+                             int id, int eyeBlink, int mouthAh, int headYaw, int headPitch,
+                             int browJump);
     }
 
     private TrackCallBackListener trackCallBackListener;

@@ -48,7 +48,8 @@ import java.util.List;
  * Created by kavya on 10/1/18.
  */
 
-public class My3DRenderer extends Renderer implements OnObjectPickedListener, StreamingTexture.ISurfaceListener {
+public class My3DRenderer extends Renderer implements OnObjectPickedListener,
+        StreamingTexture.ISurfaceListener {
     private final static String TAG = My3DRenderer.class.getSimpleName();
 
     private Object3D mContainer;
@@ -99,7 +100,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                     canvas.translate(mStreamingView.getScrollX(), -mStreamingView.getScrollY());
                     if (mIsStreamingViewMirror) {
                         // Mirror
-                        canvas.scale(-1, 1, mStreamingView.getWidth() / 2, mStreamingView.getHeight() / 2);
+                        canvas.scale(-1, 1, mStreamingView.getWidth() / 2,
+                                mStreamingView.getHeight() / 2);
                     }
                     mStreamingTexture.getSurfaceTexture().getTransformMatrix(mMatrix);
                     mStreamingView.draw(canvas);
@@ -159,17 +161,7 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         mScreenH = height;
     }
 
-    public void setSkinColor(int mSkinColor) {
-        this.mSkinColor = mSkinColor;
-    }
 
-    public void setStreamingView(View streamingView) {
-        this.mStreamingView = streamingView;
-    }
-
-    public void setStreamingHandler(Handler streamingHandler) {
-        this.mStreamingHandler = streamingHandler;
-    }
 
     @Override
     protected void initScene() {
@@ -213,7 +205,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                 }
             }
 
-            if (mOrnamentModel != null && mOrnamentModel.getTimeStep() > 0 && mMaterialList != null) {
+            if (mOrnamentModel != null && mOrnamentModel.getTimeStep() > 0 && mMaterialList != null)
+            {
                 for (int i = 0; i < mMaterialList.size(); i++) {
                     Material material = mMaterialList.get(i);
                     if (material != null) {
@@ -236,9 +229,11 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                             FloatBuffer vertBuffer = geometry3D.getVertices();
                             for (int i = 0; i < mPoints.size(); i++) {
                                 DynamicPoint point = mPoints.get(i);
-                                changePoint(vertBuffer, point.getIndex(), point.getX(), point.getY(), point.getZ());
+                                changePoint(vertBuffer, point.getIndex(), point.getX(),
+                                        point.getY(), point.getZ());
                             }
-                            geometry3D.changeBufferData(geometry3D.getVertexBufferInfo(), vertBuffer, 0, vertBuffer.limit());
+                            geometry3D.changeBufferData(geometry3D.getVertexBufferInfo(),
+                                    vertBuffer, 0, vertBuffer.limit());
                         }
                     }
 
@@ -251,7 +246,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         }
 
         // TODO
-        if (mShaderPlane != null && mOrnamentModel != null && mMyFragmentShader != null && mCustomMaterial != null) {
+        if (mShaderPlane != null && mOrnamentModel != null && mMyFragmentShader != null &&
+                mCustomMaterial != null) {
             mMyFragmentShader.setScreenW(mScreenW);
             mMyFragmentShader.setScreenH(mScreenH);
 
@@ -272,7 +268,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         }
 
         // -- not a really accurate way of doing things but you get the point :)
-        if (mSurface != null && mStreamingHandler != null && mFrameCount++ >= (mFrameRate * 0.25)) {
+        if (mSurface != null && mStreamingHandler != null && mFrameCount++ >= (mFrameRate * 0.25))
+        {
             mFrameCount = 0;
             mStreamingHandler.post(mUpdateTexture);
         }
@@ -284,7 +281,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
             mShouldUpdateTexture = false;
         }
 
-        if (mPickedObject != null && mOrnamentModel != null && mObject3DList != null && mObject3DList.size() > 0) {
+        if (mPickedObject != null && mOrnamentModel != null && mObject3DList != null &&
+                mObject3DList.size() > 0) {
             int index = mObject3DList.indexOf(mPickedObject);
             if (index >= 0) {
                 List<Ornament.Model> modelList = mOrnamentModel.getModelList();
@@ -293,12 +291,16 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                     if (model != null && model.isNeedObjectPick()) {
                         boolean isPicked = model.isPicked();
                         if (isPicked) {
-                            mPickedObject.setPosition(model.getAfterX(), model.getAfterY(), model.getAfterZ());
-                            mPickedObject.setRotation(model.getAxisX(), model.getAxisY(), model.getAxisZ(),
+                            mPickedObject.setPosition(model.getAfterX(), model.getAfterY(),
+                                    model.getAfterZ());
+                            mPickedObject.setRotation(model.getAxisX(), model.getAxisY(),
+                                    model.getAxisZ(),
                                     model.getAfterAngle());
                         } else {
-                            mPickedObject.setPosition(model.getBeforeX(), model.getBeforeY(), model.getBeforeZ());
-                            mPickedObject.setRotation(model.getAxisX(), model.getAxisY(), model.getAxisZ(),
+                            mPickedObject.setPosition(model.getBeforeX(), model.getBeforeY(),
+                                    model.getBeforeZ());
+                            mPickedObject.setRotation(model.getAxisX(), model.getAxisY(),
+                                    model.getAxisZ(),
                                     model.getBeforeAngle());
                         }
                     }
@@ -308,7 +310,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
     }
 
     @Override
-    public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset, int yPixelOffset) {
+    public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep,
+                                 int xPixelOffset, int yPixelOffset) {
     }
 
     @Override
@@ -343,7 +346,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
     public void setSurface(Surface surface) {
         mSurface = surface;
         if (mStreamingTexture != null && mStreamingView != null) {
-            mStreamingTexture.getSurfaceTexture().setDefaultBufferSize(mStreamingView.getWidth(), mStreamingView.getHeight());
+            mStreamingTexture.getSurfaceTexture().setDefaultBufferSize(mStreamingView.getWidth(),
+                    mStreamingView.getHeight());
         }
     }
 
@@ -441,8 +445,10 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
                     }
 
                     mContainer.setScale(mOrnamentModel.getScale());
-                    mContainer.setPosition(mOrnamentModel.getOffsetX(), mOrnamentModel.getOffsetY(), mOrnamentModel.getOffsetZ());
-                    mContainer.setRotation(mOrnamentModel.getRotateX(), mOrnamentModel.getRotateY(), mOrnamentModel.getRotateZ());
+                    mContainer.setPosition(mOrnamentModel.getOffsetX(), mOrnamentModel.getOffsetY(),
+                            mOrnamentModel.getOffsetZ());
+                    mContainer.setRotation(mOrnamentModel.getRotateX(), mOrnamentModel.getRotateY(),
+                            mOrnamentModel.getRotateZ());
                 }
             }
 
@@ -534,7 +540,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
         object3D.setRotation(model.getRotateX(), model.getRotateY(), model.getRotateZ());
     }
 
-    private void setModelTexture(Ornament.Model model, Object3D object3D) throws ATexture.TextureException {
+    private void setModelTexture(Ornament.Model model, Object3D object3D) throws
+            ATexture.TextureException {
         int textureResId = model.getTextureResId();
         if (textureResId > 0) {
             ATexture texture = object3D.getMaterial().getTextureList().get(0);
@@ -587,7 +594,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
             int modelSegmentsH = model.getStreamingModelSegmentsH();
             switch (modelType) {
                 case Ornament.Model.STREAMING_PLANE_MODEL:
-                    streamingModel = new Plane(modelWidth, modelHeight, modelSegmentsW, modelSegmentsH);
+                    streamingModel = new Plane(modelWidth, modelHeight, modelSegmentsW,
+                            modelSegmentsH);
                     break;
                 case Ornament.Model.STREAMING_SPHERE_MODEL:
                     streamingModel = new Sphere(modelWidth, modelSegmentsW, modelSegmentsH);
@@ -599,8 +607,10 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
             streamingModel.setTransparent(model.isStreamingModelTransparent());
             streamingModel.setColor(0);
             streamingModel.setScale(model.getScale());
-            streamingModel.setPosition(model.getStreamingOffsetX(), model.getStreamingOffsetY(),model.getStreamingOffsetZ());
-            streamingModel.setRotation(model.getStreamingRotateX(), model.getStreamingRotateY(), model.getStreamingRotateZ());
+            streamingModel.setPosition(model.getStreamingOffsetX(), model.getStreamingOffsetY(),
+                    model.getStreamingOffsetZ());
+            streamingModel.setRotation(model.getStreamingRotateX(), model.getStreamingRotateY(),
+                    model.getStreamingRotateZ());
             streamingModel.setRenderChildrenAsBatch(true);
             if (mStreamingTexture == null) {
                 mStreamingTexture = new StreamingTexture("viewTexture", this);
@@ -615,7 +625,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
             }
 
             if (model.getAlphaMapResId() > 0) {
-                material.addTexture(new AlphaMapTexture("alphaMapTex", model.getAlphaMapResId()));
+                material.addTexture(new AlphaMapTexture("alphaMapTex",
+                        model.getAlphaMapResId()));
             }
             streamingModel.setMaterial(material);
             mContainer.addChild(streamingModel);
@@ -641,7 +652,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
             object3D.getMaterial().removeTexture(texture);
 
             String texturePath = model.getTexturePath();
-            Bitmap bitmap = BitmapUtils.decodeSampledBitmapFromFilePath(texturePath, 300, 300);
+            Bitmap bitmap = BitmapUtils.decodeSampledBitmapFromFilePath(texturePath, 300,
+                    300);
                 // Adjust the color
             if (model.isNeedSkinColor()) {
                 bitmap = changeSkinColor(bitmap, mSkinColor);
@@ -825,7 +837,8 @@ public class My3DRenderer extends Renderer implements OnObjectPickedListener, St
 
     // Mixed mode - soft light
     private int softLight(int A, int B) {
-        return (B < 128) ? (2 * ((A >> 1) + 64)) * (B / 255) : (255 - (2 * (255 - ((A >> 1) + 64)) * (255 - B) / 255));
+        return (B < 128) ? (2 * ((A >> 1) + 64)) * (B / 255) : (255 - (2 * (255 - ((A >> 1) + 64))
+                * (255 - B) / 255));
     }
 
     // Mixed mode - soft light

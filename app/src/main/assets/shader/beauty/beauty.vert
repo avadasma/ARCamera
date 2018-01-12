@@ -13,7 +13,7 @@ void main( )
     highp float mul_x = 2.0 / mWidth;
     highp float mul_y = 2.0 / mHeight;
 
-    // 14个采样点
+    // 14 sampling points
     blurCoord1s[0] = vCoord + vec2( 0.0 * mul_x, -10.0 * mul_y );
     blurCoord1s[1] = vCoord + vec2( 8.0 * mul_x, -5.0 * mul_y );
     blurCoord1s[2] = vCoord + vec2( 8.0 * mul_x, 5.0 * mul_y );

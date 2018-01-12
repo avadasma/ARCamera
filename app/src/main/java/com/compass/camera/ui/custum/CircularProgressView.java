@@ -37,7 +37,8 @@ public class CircularProgressView extends AppCompatImageView {
     }
 
     public CircularProgressView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs,
+                0);
     }
 
     public CircularProgressView(Context context, AttributeSet attrs, int defStyleAttr) {

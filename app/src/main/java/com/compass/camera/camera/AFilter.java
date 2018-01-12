@@ -61,7 +61,6 @@ public abstract class AFilter {
     /**
      *Index coordinates Buffer
      */
-    protected ShortBuffer mindexBuffer;
 
     protected int mFlag = 0;
 
@@ -87,9 +86,7 @@ public abstract class AFilter {
             1.0f, 1.0f,
     };
 
-    private SparseArray<boolean[]> mBools;
     private SparseArray<int[]> mInts;
-    private SparseArray<float[]> mFloats;
 
     public AFilter(Resources mRes){
         this.mRes = mRes;
@@ -116,11 +113,6 @@ public abstract class AFilter {
         this.matrix = matrix;
     }
 
-    public float[] getMatrix(){
-        return matrix;
-    }
-
-
     public final int getTextureType(){
         return textureType;
     }
@@ -139,14 +131,6 @@ public abstract class AFilter {
 
     public int getFlag(){
         return mFlag;
-    }
-
-
-    public void setInt(int type, int ... params){
-        if(mInts == null){
-            mInts = new SparseArray<>();
-        }
-        mInts.put(type, params);
     }
 
 
@@ -198,9 +182,11 @@ public abstract class AFilter {
      */
     protected void onDraw(){
         GLES20.glEnableVertexAttribArray(mHPosition);
-        GLES20.glVertexAttribPointer(mHPosition, 2, GLES20.GL_FLOAT, false, 0, mVerBuffer);
+        GLES20.glVertexAttribPointer(mHPosition, 2, GLES20.GL_FLOAT, false, 0,
+                mVerBuffer);
         GLES20.glEnableVertexAttribArray(mHCoord);
-        GLES20.glVertexAttribPointer(mHCoord, 2, GLES20.GL_FLOAT, false, 0, mTexBuffer);
+        GLES20.glVertexAttribPointer(mHCoord, 2, GLES20.GL_FLOAT, false, 0,
+                mTexBuffer);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         GLES20.glDisableVertexAttribArray(mHPosition);
         GLES20.glDisableVertexAttribArray(mHCoord);
@@ -218,7 +204,8 @@ public abstract class AFilter {
      * Set other extended data
      */
     protected void onSetExpandData(){
-        GLES20.glUniformMatrix4fv(mHMatrix, 1, false, matrix, 0);
+        GLES20.glUniformMatrix4fv(mHMatrix, 1, false,
+                matrix, 0);
     }
 
     /**
@@ -266,7 +253,8 @@ public abstract class AFilter {
             int[] linkStatus = new int[1];
             GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
             if (linkStatus[0] != GLES20.GL_TRUE){
-                glError(1, "Could not link program:" +  GLES20.glGetProgramInfoLog(program));
+                glError(1, "Could not link program:" +
+                        GLES20.glGetProgramInfoLog(program));
                 GLES20.glDeleteProgram(program);
                 program = 0;
             }

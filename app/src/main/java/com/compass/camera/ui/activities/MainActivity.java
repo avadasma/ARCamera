@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.compass.camera.contaract.ARCamContract;
+import com.compass.camera.contract.ARCamContract;
 import com.compass.camera.presenter.ARCamPresenter;
 import com.compass.camera.utils.Accelerometer;
 import com.compass.camera.gl.Camera1Renderer;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
 
     private Context mContext;
     private ARCamPresenter mPresenter;
-    private RelativeLayout mLayoutRoot;
+
     // Used to render the camera preview
     private SurfaceView mSurfaceView;
 
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements ARCamContract.Vie
 
 
     private void initCommonView() {
-        mLayoutRoot = (RelativeLayout) findViewById(R.id.layout_root);
+        //mLayoutRoot = (RelativeLayout) findViewById(R.id.layout_root);
         mTrackText = (TextView) findViewById(R.id.tv_track);
         mActionText = (TextView) findViewById(R.id.tv_action);
     }

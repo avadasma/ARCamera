@@ -99,11 +99,11 @@ public interface STMobileApiBridge extends Library {
     }
 
     /**
-     * face信息及face上的相关动作
+     * face information and face the relevant action
 
      typedef struct st_mobile_face_action_t {
-         struct st_mobile_106_t face;          /// 人脸信息，包含矩形、106点、pose信息等//
-         unsigned int face_action;             /// 脸部动作
+         struct st_mobile_106_t face;          /// Face information, including the rectangle, 106 points, pose information, etc.
+         unsigned int face_action;             /// Face movements
      } st_mobile_face_action_t;
 
      * */
@@ -154,15 +154,15 @@ public interface STMobileApiBridge extends Library {
         ST_E_OUTOFMEMORY(-3),
         ST_E_FAIL(-4),
         ST_E_DELNOTFOUND(-5),
-    	ST_E_INVALID_PIXEL_FORMAT(-6),	///< 不支持的图像格式
-    	ST_E_FILE_NOT_FOUND(-10),   ///< 模型文件不存在
-    	ST_E_INVALID_FILE_FORMAT(-11),	///< 模型格式不正确，导致加载失败
-    	ST_E_INVALID_APPID(-12),		///< 包名错误
-    	ST_E_INVALID_AUTH(-13),		///< 加密狗功能不支持
-    	ST_E_AUTH_EXPIRE(-14),		///< SDK过期
-    	ST_E_FILE_EXPIRE(-15),		///< 模型文件过期
-    	ST_E_DONGLE_EXPIRE(-16),	///< 加密狗过期
-    	ST_E_ONLINE_AUTH_FAIL(-17),		///< 在线验证失败
+    	ST_E_INVALID_PIXEL_FORMAT(-6),	///< Unsupported image format
+    	ST_E_FILE_NOT_FOUND(-10),   ///<The model file does not exist
+    	ST_E_INVALID_FILE_FORMAT(-11),	///< Incorrect model format, resulting in a failed load
+    	ST_E_INVALID_APPID(-12),		///< Bad package name
+    	ST_E_INVALID_AUTH(-13),		///< Dongle function is not supported
+    	ST_E_AUTH_EXPIRE(-14),		///< SDK expired
+    	ST_E_FILE_EXPIRE(-15),		///< Model file expired
+    	ST_E_DONGLE_EXPIRE(-16),	///< Dongle expired
+    	ST_E_ONLINE_AUTH_FAIL(-17),		///< Online verification failed
     	ST_E_ONLINE_AUTH_TIMEOUT(-18);
 
         private final int resultCode;

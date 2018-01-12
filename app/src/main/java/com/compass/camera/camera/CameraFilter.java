@@ -22,9 +22,9 @@ public class CameraFilter extends OesFilter {
     @Override
     public void setFlag(int flag) {
         super.setFlag(flag);
-        if(getFlag() == Camera.CameraInfo.CAMERA_FACING_FRONT) {    //前置摄像头
+        if(getFlag() == Camera.CameraInfo.CAMERA_FACING_FRONT) {    //Front camera
             cameraFront();
-        }else if(getFlag() == Camera.CameraInfo.CAMERA_FACING_BACK) {   //后置摄像头
+        }else if(getFlag() == Camera.CameraInfo.CAMERA_FACING_BACK) {   //rear camera
             cameraBack();
         }
     }

@@ -38,10 +38,10 @@ public class STMobileMultiTrack106 {
      * Note
         track only one face： 
         frist:trackHandle = STMobileApiBridge.FACESDK_INSTANCE.st_mobile_tracker_106_create(modulePath, handlerPointer);
-        second: setMaxDetectableFaces(1)参数设为1
-     *  track多张人脸：	
+        second: setMaxDetectableFaces(1)The parameter is set to 1
+     *  track multiple faces:
      *  trackHandle = STMobileApiBridge.FACESDK_INSTANCE.st_mobile_tracker_106_create(modulePath, handlerPointer);
-        second:setMaxDetectableFaces(num)参数设为-1
+        second:setMaxDetectableFaces(num)Set to-1
      */
      
     public STMobileMultiTrack106(Context context, int config) {
@@ -65,7 +65,7 @@ public class STMobileMultiTrack106 {
 		if (path != null) {
 			File modelFile = new File(path);
 			if (!modelFile.exists()) {
-				//如果模型文件不存在或者当前模型文件的版本跟sdcard中的版本不一样
+				//If the model file does not exist or the version of the current model file is different from the version in the sdcard
 				try {
 					if (modelFile.exists())
 						modelFile.delete();

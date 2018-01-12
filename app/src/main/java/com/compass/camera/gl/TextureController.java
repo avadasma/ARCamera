@@ -243,11 +243,11 @@ public class TextureController implements GLSurfaceView.Renderer {
     }
 
    private void calculateCallbackOM(){
-        if(frameCallbackHeight > 0 && frameCallbackWidth > 0 && mDataSize.x > 0 && mDataSize.y > 0){
+        if(frameCallbackHeight > 0 && frameCallbackWidth > 0 && mDataSize.x > 0 &&
+                mDataSize.y > 0){
             //The output transformation matrix is calculated
-            MatrixUtils.getMatrix(callbackOM, MatrixUtils.TYPE_CENTER_CROP, mDataSize.x, mDataSize.y,
-                    frameCallbackWidth,
-                    frameCallbackHeight);
+            MatrixUtils.getMatrix(callbackOM, MatrixUtils.TYPE_CENTER_CROP, mDataSize.x,
+                    mDataSize.y, frameCallbackWidth, frameCallbackHeight);
             MatrixUtils.flip(callbackOM, false, true);
         }
     }

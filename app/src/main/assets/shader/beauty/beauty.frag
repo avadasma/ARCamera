@@ -2,11 +2,11 @@ precision lowp float;
 precision lowp int;
 uniform sampler2D vTexture;
 uniform int iternum;
-uniform float aaCoef; //参数
-uniform float mixCoef; //混合系数
+uniform float aaCoef; //parameter
+uniform float mixCoef; //Mixing coefficient
 varying highp vec2 textureCoordinate;
 varying highp vec2 blurCoord1s[14];
-const float distanceNormalizationFactor = 4.0;    //标准化距离因子常量
+const float distanceNormalizationFactor = 4.0;    //Normalized distance factor constant
 const mat3 saturateMatrix = mat3(1.1102,-0.0598,-0.061,-0.0774,1.0826,-0.1186,-0.0228,-0.0228,1.1772);
 
 void main( ) {
@@ -19,48 +19,48 @@ void main( ) {
     float distanceFromCentralColor;
     float gaussianWeight;
 
-    //通过绿色通道来磨皮
-    //取得当前点颜色的绿色通道
+    //Peel the skin through the green channel
+    //Get the current color of the green channel
     central = texture2D( vTexture, textureCoordinate ).g;
-    //高斯权重
+    //Gaussian weight
     gaussianWeightTotal = 0.2;
-    //绿色通道色彩记数
+    //Green channel color count
     sum = central * 0.2;
 
-    // 计算各个采样点处的高斯权重，包括密闭性和相似性
+    // Calculate the Gaussian weights at each sampling point, including confinement and similarity
     for (int i = 0; i < 6; i++) {
-        //采样点的绿色通道
+        //Green channel for sample points
         sampleColor = texture2D( vTexture, blurCoord1s[i] ).g;
-        //采样点和计算点的颜色差
+        //The color difference between the sample point and the calculated point
         distanceFromCentralColor = min( abs( central - sampleColor ) * distanceNormalizationFactor, 1.0 );
-        //高斯权重
+        //Gaussian weight
         gaussianWeight = 0.05 * (1.0 - distanceFromCentralColor);
-        //高斯权重总和
+        //Gaussian weight sum
         gaussianWeightTotal += gaussianWeight;
-        //绿色通道色彩记数累计
+        //Green channel color count cumulative
         sum += sampleColor * gaussianWeight;
     }
     for (int i = 6; i < 14; i++) {
-        //采样点的绿色通道
+        //Green channel for sample points
         sampleColor = texture2D( vTexture, blurCoord1s[i] ).g;
-        //采样点和计算点的颜色差
+        //The color difference between the sample point and the calculated point
         distanceFromCentralColor = min( abs( central - sampleColor ) * distanceNormalizationFactor, 1.0 );
-        //高斯权重
+        //Gaussian weight
         gaussianWeight = 0.1 * (1.0 - distanceFromCentralColor);
-        //高斯权重总和
+        //Gaussian weight sum
         gaussianWeightTotal += gaussianWeight;
-        //绿色通道色彩记数累计
+        //Green channel color count cumulative
         sum += sampleColor * gaussianWeight;
     }
 
-    //采样后的绿色通道色彩均值
+    //Sampling green channel color mean
     sum = sum / gaussianWeightTotal;
 
-    //取得当前点的颜色
+    //Get the color of the current point
     centralColor = texture2D( vTexture, textureCoordinate ).rgb;
-    //采样值
+    //sample value
     sampleColor = centralColor.g - sum + 0.5;
-    //迭代计算
+    //Iteration calculation
     for (int i = 0; i < iternum; ++i) {
         if (sampleColor <= 0.5) {
             sampleColor = sampleColor * sampleColor * 2.0;

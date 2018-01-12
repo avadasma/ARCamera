@@ -9,13 +9,18 @@ import android.opengl.GLES20;
 public class EasyGlUtils {
 
     public static void useTexParameter(){
-        //Set to reduce the filter to use the texture coordinates of the closest pixel color as the need to draw the pixel color
+        //Set to reduce the filter to use the texture coordinates of the closest pixel color as the
+        // need to draw the pixel color
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_NEAREST);
-        //Set the zoom filter to use the texture coordinates of the nearest number of colors, weighted average algorithm to get the pixel color to be drawn
+        //Set the zoom filter to use the texture coordinates of the nearest number of colors,
+        // weighted average algorithm to get the pixel color to be drawn
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR);
-        //Set the wraparound direction S, and cut the texture coordinates to [1 / 2n, 1-1 / 2n]. Will result in never blending with the border
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);
-        //Set the wraparound direction T and cut the texture coordinates to [1 / 2n, 1-1 / 2n]. Will result in never blending with the border
+        //Set the wraparound direction S, and cut the texture coordinates to [1 / 2n, 1-1 / 2n].
+        // Will result in never blending with the border
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,GLES20.
+                GL_CLAMP_TO_EDGE);
+        //Set the wraparound direction T and cut the texture coordinates to [1 / 2n, 1-1 / 2n].
+        // Will result in never blending with the border
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
     }
 
@@ -46,6 +51,7 @@ public class EasyGlUtils {
     }
 
     public static void unBindFrameBuffer(){
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,
+                0);
     }
 }

@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.util.Log;
 
-import com.compass.camera.contaract.ARCamContract;
+import com.compass.camera.contract.ARCamContract;
 import com.compass.camera.model.DynamicPoint;
 import com.sensetime.stmobileapi.STMobileFaceAction;
 import com.sensetime.stmobileapi.STUtils;

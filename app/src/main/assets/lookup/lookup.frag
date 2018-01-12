@@ -4,10 +4,10 @@ uniform sampler2D vTexture;
 uniform sampler2D maskTexture;
 
 uniform highp float intensity;
-//lookup table 为大小为512*512，个数为8*8的格子表
+//lookup table A size of 512 * 512, the number of 8 * 8 lattice table
 void main(){
     highp vec4 textureColor = texture2D(vTexture, textureCoordinate);
-    //根据当前颜色的蓝色通道查找所在格子
+    //According to the current color of the blue channel to find where the grid
     highp float blueColor = textureColor.b * 63.0;
     highp vec2 quad1;
     quad1.y = floor(floor(blueColor) / 8.0);

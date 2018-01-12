@@ -1,4 +1,4 @@
-package com.compass.camera.contaract;
+package com.compass.camera.contract;
 
 import android.graphics.Bitmap;
 
@@ -27,7 +27,8 @@ public interface ARCamContract {
     }
 
     interface Presenter {
-        void handlePhotoFrame(byte[] bytes, Bitmap mRajawaliBitmap, int photoWidth, int photoHeight);
+        void handlePhotoFrame(byte[] bytes, Bitmap mRajawaliBitmap, int photoWidth,
+                              int photoHeight);
 
         // void handleVideoFrame(byte[] bytes, int[] mRajawaliPixels);
 

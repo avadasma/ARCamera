@@ -128,11 +128,14 @@ public class CustomVertexShaderMaterialPlugin implements IMaterialPlugin {
             // -- multiply all the parameters to get the final
             //    vertex position
             // -- timeVec.x += directionVec.x * cosx * siny * cosz * cStrength;
-            timeVec.x().assignAdd(directionVec.x().multiply(cosX).multiply(sinY).multiply(cosZ).multiply(mcStrength));
+            timeVec.x().assignAdd(directionVec.x().multiply(cosX).multiply(sinY).multiply(cosZ).
+                    multiply(mcStrength));
             // -- timeVec.y += directionVec.y * sinx * cosy * sinz * cStrength;
-            timeVec.y().assignAdd(directionVec.y().multiply(sinX).multiply(cosY).multiply(sinZ).multiply(mcStrength));
+            timeVec.y().assignAdd(directionVec.y().multiply(sinX).multiply(cosY).multiply(sinZ).
+                    multiply(mcStrength));
             // -- timeVec.z += directionVec.z * sinx * cosy * cosz * cStrength;
-            timeVec.z().assignAdd(directionVec.z().multiply(sinX).multiply(cosY).multiply(cosZ).multiply(mcStrength));
+            timeVec.z().assignAdd(directionVec.z().multiply(sinX).multiply(cosY).multiply(cosZ).
+                    multiply(mcStrength));
 
             gPosition.assign(timeVec);
 

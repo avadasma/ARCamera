@@ -81,7 +81,7 @@ public class BitmapUtils {
             if (bitmap.getWidth() <= reqWidth) {
                 return bitmap;
             } else {
-                float ratio = (float)bitmap.getHeight() / bitmap.getWidth();
+                float ratio = (float) bitmap.getHeight() / bitmap.getWidth();
                 int reqHeight = (int) (reqWidth * ratio);
                 return Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, true);
             }
@@ -92,7 +92,7 @@ public class BitmapUtils {
         int[] size = getImageWidthHeight(path);
         int width = size[0];
         int height = size[1];
-        float ratio = (float)height / width;
+        float ratio = (float) height / width;
         Log.e(TAG, "src bitmap width: " + width);
         Log.e(TAG, "src bitmap height: " + height);
         Log.e(TAG, "src bitmap ratio: " + ratio);
@@ -114,11 +114,14 @@ public class BitmapUtils {
         Log.e(TAG, "dst bitmap width: " + width);
         Log.e(TAG, "dst bitmap height: " + height);
 
-        Bitmap bitmap = decodeSampledBitmapFromFilePath(path, width, height);  // 这个方法只是每次除以2，直到小于等于指定的大小，而不是缩小到指定的大小
+        // This method is only divided by 2 each time, until less than or equal to the
+        //specified size, rather than reduced to the specified size
+        Bitmap bitmap = decodeSampledBitmapFromFilePath(path, width, height);
+
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
-    public static Bitmap getViewBitmap(View view){
+    public static Bitmap getViewBitmap(View view) {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
         Bitmap bitmap = view.getDrawingCache().copy(Bitmap.Config.ARGB_8888, false);
@@ -126,15 +129,17 @@ public class BitmapUtils {
         return bitmap;
     }
 
-    public static int[] getImageWidthHeight(String path){
+    public static int[] getImageWidthHeight(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
 
         /**
          * The most critical here, the options.injustdecodebounds = true;
-         * Here again decodeFile (), the returned bitmap is empty, but this time calling options.outHeight already contains a high picture
+         * Here again decodeFile (), the returned bitmap is empty, but this time calling
+         * options.outHeight already contains a high picture
          */
         options.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(path, options); // 此时返回的bitmap为null
+        // The returned bitmap is null
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
         /**
          *options.outHeight is the height of the original image
          */

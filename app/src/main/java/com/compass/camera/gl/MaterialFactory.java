@@ -13,7 +13,6 @@ import org.rajawali3d.materials.textures.CubeMapTexture;
 
 public class MaterialFactory {
 
-    public final static int MATERIAL_DEFAULT = 0;
     public final static int MATERIAL_SKY_CUBE = 1;
     public final static int MATERIAL_FROST_CUBE = 2;
 

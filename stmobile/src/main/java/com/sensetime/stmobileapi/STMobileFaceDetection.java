@@ -22,9 +22,9 @@ public class STMobileFaceDetection {
 	private static boolean DEBUG = true;// false;
 	private String TAG = "FaceDetection";
 	private static final String DETECTION_MODEL_NAME = "track_compose.model";
-	public static int ST_MOBILE_DETECT_DEFAULT_CONFIG = 0x00000000;  ///< 默认选项
-	public static int ST_MOBILE_DETECT_FAST = 0x00000001;  ///< resize图像为长边320的图像之后再检测，结果处理为原图像对应结果
-	public static int ST_MOBILE_DETECT_BALANCED = 0x00000002;  ///< resize图像为长边640的图像之后再检测，结果处理为原图像对应结果
+	public static int ST_MOBILE_DETECT_DEFAULT_CONFIG = 0x00000000;  ///< Default option
+	public static int ST_MOBILE_DETECT_FAST = 0x00000001;  ///< The resize image is detected after the image of the long edge 320 and the result is processed as the corresponding result of the original image
+	public static int ST_MOBILE_DETECT_BALANCED = 0x00000002;  ///<The resize image is detected after the image of the long edge 640, and the result is processed as the corresponding result of the original image
 	public static int ST_MOBILE_DETECT_ACCURATE = 0x00000004;
 	
     PointerByReference ptrToArray = new PointerByReference();
@@ -51,7 +51,7 @@ public class STMobileFaceDetection {
 		if (path != null) {
 			File modelFile = new File(path);
 			if (!modelFile.exists()) {
-				//如果模型文件不存在或者当前模型文件的版本跟sdcard中的版本不一样
+				//If the model file does not exist or the version of the current model file is different from the version in the sdcard
 				try {
 					if (modelFile.exists())
 						modelFile.delete();

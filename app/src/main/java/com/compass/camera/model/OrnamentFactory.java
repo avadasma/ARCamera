@@ -103,21 +103,21 @@ public class OrnamentFactory {
         float posY = 0.175f;
         float posZ = 1.35f;
 
-        // 左眼光柱
+        // Left eye light bar
         Object3D laserLeft = new NPrism(24, radius, radius, height);
         laserLeft.setRotation(0, 0, -90);
         laserLeft.setPosition(-posX, posY, posZ);
 
-        // 左眼光球
+        // Left eye ball of light
         Object3D sphereLeft = new Sphere(radius * 1.2f, 60, 60);
         sphereLeft.setPosition(-posX, posY, posZ + height - height * 0.4f);
 
-        // 右眼光柱
+        // Right eye column
         Object3D laserRight = new NPrism(24, radius, radius, height);
         laserRight.setRotation(0, 0, -90);
         laserRight.setPosition(posX, posY, posZ);
 
-        // 右眼光球
+        // Right eye ball of light
         Object3D sphereRight = new Sphere(radius * 1.2f, 60, 60);
         sphereRight.setPosition(posX, posY, posZ + height - height * 0.4f);
 
@@ -209,7 +209,7 @@ public class OrnamentFactory {
         modelList.add(ironManTop);
         modelList.add(ironManBottom);
         ornament.setModelList(modelList);
-        ornament.setToastMsg("点击头盔");
+        ornament.setToastMsg("Click on the helmet");
 
         return ornament;
     }
@@ -312,7 +312,7 @@ public class OrnamentFactory {
         modelList.add(model);
         ornament.setModelList(modelList);
         ornament.setFrameCallbackType(TextureController.FRAME_CALLBACK_DISABLE);
-        ornament.setToastMsg("镜面显示浏览器画面");
+        ornament.setToastMsg("Mirror display browser screen");
 
         return ornament;
     }
@@ -467,7 +467,8 @@ public class OrnamentFactory {
         List<Ornament> ornaments = new ArrayList<>();
         ornaments.add(getMask(R.drawable.average_male, R.drawable.mask_man, true));
         ornaments.add(getMask(R.drawable.average_female, R.drawable.mask_woman, true));
-        ornaments.add(getMask(R.drawable.female_virtual_makeup, R.drawable.mask_makeup, false));
+        ornaments.add(getMask(R.drawable.female_virtual_makeup, R.drawable.mask_makeup,
+                false));
         ornaments.add(getMask(R.drawable.lion_texture, R.drawable.mask_lion, false));
         ornaments.add(getMask(R.drawable.skull_texture, R.drawable.mask_skull, false));
         return ornaments;

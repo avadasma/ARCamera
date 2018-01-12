@@ -127,19 +127,19 @@ public class STUtils {
 	}
     
 	/**
-	 * 将Android的特殊格式转化成ARGB彩图
+	 * Convert Android's special format to RGB colormap
 	 * 
 	 * @param nv21
-	 * 输入的图片数据，Android读图特殊格式
+	 * Enter the picture data, Android read special format
 	 * 
 	 * @param width
-	 * 输入图的宽度
+	 * Enter the width of the graph
 	 * 
 	 * @param height
-	 * 输入图的高度
+	 * Enter the height of the graph
 	 * 
 	 * @return
-	 * ARGB彩图
+	 * ARGB color map
 	 */
 	static public Bitmap NV21ToRGBABitmap(byte []nv21, int width, int height) {
 		YuvImage yuvImage = new YuvImage(nv21, ImageFormat.NV21, width, height, null);
